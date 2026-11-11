@@ -5,7 +5,7 @@ Slides for the Woo Brothers sharing session in Jerantut, Pahang (Stanley Woo · 
 
 - **Online:** https://stanleywoosweeleong.github.io/SharingEvent/ (installable to a phone's home screen; works offline after the first visit)
 - `index.html`: the presentation app (logos, QR codes and fonts are built in)
-- `shots/`: app screenshots used on the "inside the app" slides
+- `shots/`: app screenshots in English, Bahasa Malaysia and 中文 (`<app>-<en|ms|zh>-<n>.jpg`); the slides show the set matching the chosen language
 - `icons/`, `manifest.webmanifest`, `sw.js`: make the talk installable and available offline
 - `speaker-script.md`: timing table and speaker notes for every slide.
 
