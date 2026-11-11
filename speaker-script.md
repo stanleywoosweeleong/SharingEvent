@@ -36,7 +36,7 @@ Open (30 s). Selamat pagi / 大家好. I'm Stanley Woo. My friend Bryan Woo and 
 
 ## 2. woobrothers.my
 
-1.25 min. Show woobrothers.my first: it is the home for everything today, so if people remember one thing, it's this address. We are not a company and sell nothing. I build mostly weather, durian and pest apps; Bryan built CompareCast, the NDVI satellite app and full offline courses. Every app has BM, English and 华文. Invite them to scan now and add it to the home screen; every app in this talk is linked from there.
+1.25 min. Show woobrothers.my first: it is the home for everything today, so if people remember one thing, it's this address. We are not a company and sell nothing, and new apps keep arriving, so we don't quote a number. I build mostly weather, durian and pest apps; Bryan built CompareCast, the NDVI satellite app and full offline courses. Every app has BM, English and 华文. Invite them to scan now and add it to the home screen; every app in this talk is linked from there.
 
 ## 3. WeatherNext Jerantut
 
@@ -104,7 +104,7 @@ Open (30 s). Selamat pagi / 大家好. I'm Stanley Woo. My friend Bryan Woo and 
 
 ## 19. Claude: how we build
 
-1.25 min. How can two people with day jobs build 33 apps? We use Claude, an AI assistant from Anthropic, as our coding partner. We bring the farm problem, the research and the field checking; Claude writes and tests the code and helps with the three languages. Step 4 matters most: nothing goes out until we've checked it against sources and real trees. Then mention this deck was built with Claude too. (Adjust this slide if your own workflow differs.)
+1.25 min. How can two people with day jobs build so many apps? We use Claude, an AI assistant from Anthropic, as our coding partner. We bring the farm problem, the research and the field checking; Claude writes and tests the code and helps with the three languages. Step 4 matters most: nothing goes out until we've checked it against sources and real trees. Then mention this deck was built with Claude too. (Adjust this slide if your own workflow differs.)
 
 ## 20. Claude: try it
 

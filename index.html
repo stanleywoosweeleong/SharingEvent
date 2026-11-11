@@ -451,18 +451,18 @@ const SLIDES = [
         {en:'“Good technology should not be only for big companies.”',ms:'“Teknologi yang baik tidak sepatutnya untuk syarikat besar sahaja.”',zh:'「好的技术，不应该只有大公司用得起。」'})}
       <div class="row" style="gap:18px">
         <div class="card grow"><b style="font-family:var(--display);font-size:34px">Stanley Woo</b>
-          <div class="small muted">${t({en:'Weather, durian and pest apps · 26 apps',ms:'Aplikasi cuaca, durian dan perosak · 26 aplikasi',zh:'天气、榴莲、病虫害 · 26 个软件'})}</div></div>
+          <div class="small muted">${t({en:'Weather, durian and pest apps',ms:'Aplikasi cuaca, durian dan perosak',zh:'天气、榴莲、病虫害软件'})}</div></div>
         <div class="card grow"><b style="font-family:var(--display);font-size:34px">Bryan Woo</b>
-          <div class="small muted">${t({en:'CompareCast, NDVI satellite, full courses · 7 apps',ms:'CompareCast, satelit NDVI, kursus penuh · 7 aplikasi',zh:'CompareCast、NDVI 卫星、完整课程 · 7 个软件'})}</div></div>
+          <div class="small muted">${t({en:'CompareCast, NDVI satellite, full courses',ms:'CompareCast, satelit NDVI, kursus penuh',zh:'CompareCast、NDVI 卫星、完整课程'})}</div></div>
       </div>
       <div class="row" style="gap:16px">
-        ${[['33',{en:'free apps',ms:'aplikasi percuma',zh:'个免费软件'}],['RM 0',{en:'no fees, nothing for sale',ms:'tiada bayaran, tiada jualan',zh:'不收费，不卖东西'}],['BM · EN · 华文',{en:'in every app',ms:'dalam setiap aplikasi',zh:'每个软件都支持'}]]
-          .map(([n,l])=>`<div class="card grow" style="padding:14px 20px"><div class="gold" style="font-family:var(--display);font-weight:800;font-size:44px;line-height:1.1;white-space:nowrap">${n}</div><div class="small muted">${t(l)}</div></div>`).join('')}
+        ${[[{en:'New',ms:'Baharu',zh:'新'},{en:'apps added all the time',ms:'aplikasi sentiasa ditambah',zh:'软件不断增加'}],['RM 0',{en:'no fees, nothing for sale',ms:'tiada bayaran, tiada jualan',zh:'不收费，不卖东西'}],['BM · EN · 华文',{en:'in every app',ms:'dalam setiap aplikasi',zh:'每个软件都支持'}]]
+          .map(([n,l])=>`<div class="card grow" style="padding:14px 20px"><div class="gold" style="font-family:var(--display);font-weight:800;font-size:44px;line-height:1.1;white-space:nowrap">${typeof n==='string'?n:t(n)}</div><div class="small muted">${t(l)}</div></div>`).join('')}
       </div>
     </div>
     ${qr('woo',330,{en:'Save this on your home screen',ms:'Simpan di skrin utama telefon',zh:'加到手机主屏幕'},D.urls.woo)}
   </div>${foot()}`,
-  notes:`<b>1.25 min.</b> Show woobrothers.my first: it is the home for everything today, so if people remember one thing, it's this address. We are not a company and sell nothing. I build mostly weather, durian and pest apps; Bryan built CompareCast, the NDVI satellite app and full offline courses. Every app has BM, English and 华文. Invite them to scan now and add it to the home screen; every app in this talk is linked from there.` },
+  notes:`<b>1.25 min.</b> Show woobrothers.my first: it is the home for everything today, so if people remember one thing, it's this address. We are not a company and sell nothing, and new apps keep arriving, so we don't quote a number. I build mostly weather, durian and pest apps; Bryan built CompareCast, the NDVI satellite app and full offline courses. Every app has BM, English and 华文. Invite them to scan now and add it to the home screen; every app in this talk is linked from there.` },
 
 /* 3 */ { min:1.5, name:'WeatherNext Jerantut',
   html: () => {
@@ -614,7 +614,7 @@ const SLIDES = [
 
 /* 16 */ { min:1.25, name:'Claude: how we build',
   html: () => `${head(K.claude,
-      {en:'How two friends build 33 apps in their spare time',ms:'Bagaimana dua rakan bina 33 aplikasi pada masa lapang',zh:'两个朋友，怎么用业余时间做出 33 个软件？'})}
+      {en:'How two friends build so many apps in their spare time',ms:'Bagaimana dua rakan bina begitu banyak aplikasi pada masa lapang',zh:'两个朋友，怎么用业余时间做出这么多软件？'})}
     <div class="row grow" style="gap:40px">
       <div class="steps grow" style="gap:14px">
         ${step(1,{en:'A farmer’s problem',ms:'Masalah petani',zh:'农友的问题'},{en:'“There are holes in my durian trunk. Which pest is it?”',ms:'“Ada lubang pada batang durian saya. Perosak apa?”',zh:'「我的榴莲树干有洞，是什么虫？」'})}
@@ -630,7 +630,7 @@ const SLIDES = [
         <div class="small muted">${t({en:'Even this presentation, with its Projector Mode, was built with Claude.',ms:'Malah pembentangan ini, dengan Projector Mode, dibina dengan Claude.',zh:'连这个演讲软件和它的投影模式，也是用 Claude 做的。'})}</div>
       </div>
     </div>${foot()}`,
-  notes:`<b>1.25 min.</b> How can two people with day jobs build 33 apps? We use Claude, an AI assistant from Anthropic, as our coding partner. We bring the farm problem, the research and the field checking; Claude writes and tests the code and helps with the three languages. Step 4 matters most: nothing goes out until we've checked it against sources and real trees. Then mention this deck was built with Claude too. <i>(Adjust this slide if your own workflow differs.)</i>` },
+  notes:`<b>1.25 min.</b> How can two people with day jobs build so many apps? We use Claude, an AI assistant from Anthropic, as our coding partner. We bring the farm problem, the research and the field checking; Claude writes and tests the code and helps with the three languages. Step 4 matters most: nothing goes out until we've checked it against sources and real trees. Then mention this deck was built with Claude too. <i>(Adjust this slide if your own workflow differs.)</i>` },
 
 /* 17 */ { min:1, name:'Claude: try it',
   html: () => { const ex = [
