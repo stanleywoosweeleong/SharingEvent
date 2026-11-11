@@ -220,13 +220,15 @@ h1{font-size:calc(84px*var(--k));line-height:1.02;font-weight:800}
 .close{position:absolute;right:28px;top:22px;border:1.5px solid var(--line);background:var(--card);border-radius:50%;width:52px;height:52px;font-size:28px;cursor:pointer}
 
 /* inside-the-app phone screenshots */
-.phones{flex:1;display:flex;justify-content:center;align-items:center;gap:48px;min-height:0}
-.phone{margin:0;display:flex;flex-direction:column;align-items:center;gap:12px;flex:none}
-.phone .scr{height:600px;aspect-ratio:780/1688;border-radius:30px;border:7px solid #0B1510;overflow:hidden;background:#0B1510}
-.phone .scr img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
+.phones{flex:1;display:flex;flex-wrap:nowrap;justify-content:center;align-items:center;gap:48px;min-height:0;min-width:0}
+/* Phone frames get an exact width and height (780×1688 screen ratio) so every browser lays them out the same.
+   Some mobile browsers sized frames from the 420 px image when only a ratio was given, pushing the outer phones off the slide. */
+.phone{margin:0;display:flex;flex-direction:column;align-items:center;gap:12px;flex:none;min-width:0}
+.phone .scr{width:277px;height:600px;border-radius:30px;border:7px solid #0B1510;overflow:hidden;background:#0B1510}
+.phone .scr img{width:100%;height:100%;max-width:none;object-fit:cover;object-position:top;display:block}
 .phone figcaption{font-size:24px;font-weight:700;color:var(--muted)}
-.phones.sm .scr{height:540px}
-.zoom .phones{flex:none;gap:18px}.zoom .phones .scr{height:520px;border-width:6px;border-radius:26px}
+.phones.sm .scr{width:250px;height:540px}
+.zoom .phones{flex:none;gap:18px}.zoom .phones .scr{width:240px;height:520px;border-width:6px;border-radius:26px}
 .wa{display:inline-flex;align-items:center;gap:12px;background:#25D366;color:#06301A;font-weight:800;font-size:30px;padding:14px 26px;border-radius:6px;text-decoration:none}
 .wa svg{width:34px;height:34px}
 /* calibration */
