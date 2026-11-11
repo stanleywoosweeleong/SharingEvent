@@ -56,7 +56,10 @@
   --deep:#08130D; --on-deep:#E7EDE2; --on-deep-2:#C5D2C6; --deep-line:#1F3528;
   --m1:#62A9E6; --m2:#FF9A4D; --m3:#CDA2FF; --m4:#FF7FA6; color-scheme:dark}
 /* Projector Mode: projectors wash out greys and thin strokes, so push contrast */
-:root.proj[data-room="day"], :root.proj:not([data-room]){--muted:#2A3B30; --line:#A9B5A3}
+:root.proj:not([data-room]){--muted:#2A3B30; --line:#A9B5A3}
+@media (prefers-color-scheme: dark){:root.proj:not([data-room]):not([data-theme="light"]){--muted:#D0DCD2; --line:#3A5544}}
+:root.proj[data-theme="dark"]:not([data-room]){--muted:#D0DCD2; --line:#3A5544}
+:root.proj[data-room="day"]{--muted:#2A3B30; --line:#A9B5A3}
 :root.proj[data-room="dark"]{--muted:#D0DCD2; --line:#3A5544}
 
 html,body{height:100%}
@@ -361,6 +364,7 @@ h1{font-size:calc(84px*var(--k));line-height:1.02;font-weight:800}
   <span class="time" id="ptime"></span>
   <select id="plang" aria-label="Language"><option value="en">EN</option><option value="ms">BM</option><option value="zh">中文</option></select>
   <button type="button" data-p="grid">All</button>
+  <button type="button" data-p="room" aria-label="Switch bright or dark slides">☀ / ☾</button>
   <button type="button" data-p="black">■ Black</button>
 </div>
 <div class="turn" id="turn">↻<br>Turn your phone sideways to present</div>
@@ -1008,7 +1012,7 @@ document.addEventListener('click', e => {
   if(act){ if(act.dataset.act==='wx') loadWeather(); if(act.dataset.act==='close') closeOverlays(); return; }
   const ov = e.target.closest('.overlay'); if(ov && (e.target === ov || e.target.classList.contains('frame') || e.target.classList.contains('grid'))){ closeOverlays(); return; }
   const pb = e.target.closest('[data-p]');
-  if(pb){ const a = pb.dataset.p; if(a==='exit') exitProj(); else if(a==='prev') prev(); else if(a==='next') next(); else if(a==='skip') nextMain(); else if(a==='grid'){ openGrid(); $('#pbar').classList.remove('on'); } else if(a==='black'){ blank('black'); $('#pbar').classList.remove('on'); } if($('#pbar').classList.contains('on')) showPbar(); return; }
+  if(pb){ const a = pb.dataset.p; if(a==='exit') exitProj(); else if(a==='prev') prev(); else if(a==='next') next(); else if(a==='skip') nextMain(); else if(a==='grid'){ openGrid(); $('#pbar').classList.remove('on'); } else if(a==='black'){ blank('black'); $('#pbar').classList.remove('on'); } else if(a==='room'){ const dark = root.dataset.room ? root.dataset.room==='dark' : matchMedia('(prefers-color-scheme: dark)').matches; setRoom(dark ? 'day' : 'dark'); } if($('#pbar').classList.contains('on')) showPbar(); return; }
   if(root.classList.contains('proj') && e.target.closest('#vp') && !e.target.closest('button,a,select')){
     const x = e.clientX / innerWidth, y = e.clientY / innerHeight;
     if(y < 0.15){ togglePbar(); return; }
