@@ -921,7 +921,9 @@ function enterProj(){
   const el = document.documentElement;
   if(el.requestFullscreen && !document.fullscreenElement) el.requestFullscreen().then(() => { try{ screen.orientation && screen.orientation.lock && screen.orientation.lock('landscape').catch(()=>{}); }catch(e){} }).catch(()=>{});
   keepAwake(); layout(); checkPortrait();
-  if(!T.start && !T.acc) T.start = Date.now();
+  // Start from slide 1 (like "From Beginning") on the first Present of this visit, or when sitting on the last slide.
+  // The talk remembers the last slide viewed, so without this it could open on 37/37 after a rehearsal.
+  if((!T.start && !T.acc) || S.i === SLIDES.length-1){ T.acc = 0; T.start = Date.now(); buzzedFor = -1; if(S.i !== 0) go(0); }
   toast(TOUCH ? 'Tap right side: next · left side: back · top edge: menu' : 'Projector Mode · click or → for next · B blank · L laser · Esc to leave');
 }
 function exitProj(){
