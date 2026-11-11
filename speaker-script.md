@@ -15,20 +15,21 @@ Open `woo-jerantut-talk.html` in Chrome. Press **P** for Projector Mode, **S** f
 | 7 | RainLog Lab | 0.75 | 6:15 |
 | 8 | RainScore Lab | 0.75 | 7:00 |
 | 9 | ENSO Monitor | 0.75 | 7:45 |
-| 10 | Durian Tree Science | 0.75 | 8:30 |
-| 11 | Durian IPM | 0.75 | 9:15 |
-| 12 | AMIS · AgriMicrobe | 0.75 | 10:00 |
-| 13 | AgriPro Timeline | 1 | 10:45 |
-| 14 | Offseason Durian | 0.75 | 11:45 |
-| 15 | Tiger Stripe | 0.75 | 12:30 |
-| 16 | AgriPro Notebook | 0.75 | 13:15 |
-| 17 | Spray day: ChemLog + DroneDose | 1 | 14:00 |
-| 18 | More durian apps | 0.5 | 15:00 |
-| 19 | Claude: how we build | 1.25 | 15:30 |
-| 20 | Claude: try it | 1 | 16:45 |
-| 21 | Thank you | 0.5 | 17:45 |
+| 10 | NDVI Remote Sensing | 0.75 | 8:30 |
+| 11 | Durian Tree Science | 0.75 | 9:15 |
+| 12 | Durian IPM | 0.75 | 10:00 |
+| 13 | AMIS · AgriMicrobe | 0.75 | 10:45 |
+| 14 | AgriPro Timeline | 1 | 11:30 |
+| 15 | Offseason Durian | 0.75 | 12:30 |
+| 16 | Tiger Stripe | 0.75 | 13:15 |
+| 17 | AgriPro Notebook | 0.75 | 14:00 |
+| 18 | Spray day: ChemLog + DroneDose | 1 | 14:45 |
+| 19 | More durian apps | 0.5 | 15:45 |
+| 20 | Claude: how we build | 1.25 | 16:15 |
+| 21 | Claude: try it | 1 | 17:30 |
+| 22 | Thank you | 0.5 | 18:30 |
 
-Planned total 18.25 min, leaving 1.75 min for questions.
+Planned total 19 min, leaving 1 min for questions.
 
 ## 1. Title
 
@@ -66,50 +67,54 @@ Open (30 s). Selamat pagi / 大家好. I'm Stanley Woo. My friend Bryan Woo and 
 
 45 s. From days to months. ENSO Monitor reads NOAA's official RONI index and weekly Niño 3.4 sea temperature, then adds the Indian Ocean Dipole, the MJO (a wet or dry pulse every 30–60 days) and Northeast Monsoon cold surges. We are in the Northeast Monsoon now (November), so drains and Phytophthora come first. Each signal comes with orchard advice, and it links to MetMalaysia for official warnings. SUHU is the sister app for drought and haze risk.
 
-## 10. Durian Tree Science
+## 10. NDVI Remote Sensing
+
+45 s. Bryan's NDVI app. It uses free Sentinel-2 satellite images (10 m pixels, a new pass every few days) to compute NDVI, a plant-health index, and NDMI, a moisture index, then marks the weaker zones of each plot and shows local weather. Instead of walking every row, go straight to the patch that looks different. Be honest about the tropics: clouds often block the view, so it uses the most recent clear image. This is also the bridge into the durian section: from the sky down to the tree.
+
+## 11. Durian Tree Science
 
 45 s. The durian section follows the order you'd meet things in a season: know the tree, protect it, keep the soil alive, time the season, fix fruit quality, feed it, then spray. Durian Tree Science is the foundation: 45 sections and 31 plates, from roots and trunk to floral induction, fruit set and fruit drop, plus how Thailand, Vietnam, Indonesia and others grow durian.
 
-## 11. Durian IPM
+## 12. Durian IPM
 
 45 s. Durian IPM: tap where the problem is and what you see; it places it in one of about 22 pest groups. Non-chemical steps come first, then organic and conventional options ranked by effect. It suggests a rotation from your last spray so you don't repeat a mode of action, and warns about bees at flowering, harvest intervals and banned products.
 
-## 12. AMIS · AgriMicrobe
+## 13. AMIS · AgriMicrobe
 
 45 s. AMIS covers 83 beneficial microbes and 42 crops. The Synergy Guide shows which microbes help or fight each other; the Tank-Mix Checker says whether microbes, foliar fertilisers and pesticides can share a tank; First Aid gives today's actions by urgency, including when microbes are not the answer. Most of it works offline; the AI advisor needs the user's own API key.
 
-## 13. AgriPro Timeline
+## 14. AgriPro Timeline
 
 1 min. AgriPro Timeline, Personal Edition. The backbone is days after anthesis (days from full bloom), which is how growers and researchers time durian harvest: about 95 days for Musang King, 105 for IOI, around 120 for D24 and Black Thorn. You anchor a bud, bloom or harvest date and it lays out all 7 stages. Each time you log what you saw on the tree, the projection re-sets to your observation. A heat-unit (GDD) adjustment nudges dates for hot or cool spells; its base temperature is a working assumption to refine against your own records. Then send the schedule to WhatsApp.
 
-## 14. Offseason Durian
+## 15. Offseason Durian
 
 45 s. Off-season: 8 steps from choosing the harvest month, preparing the tree, PBZ, drying the root zone, buds to bloom, holding the crop, harvest, and resetting so PBZ doesn't build up. Off-season fruit can fetch 2–3 times the peak price, but it is hard; every figure here links to a published trial.
 
-## 15. Tiger Stripe
+## 16. Tiger Stripe
 
 45 s. Tiger stripe (老虎斑, belang harimau) is a big quality problem for Musang King. The app turns Prof. Dr. Tran Van Hau's AGRI Malaysia 2026 talk into notes and an action plan: affected trees had low leaf potassium, calcium and magnesium and high nitrogen, consistent with calcium and carbohydrate shortage. The action plan converts the paper's calcium nitrate and magnesium sulphate spray rates to the farm-shop product you actually bought. It leads into the nutrient notebook on the next slide.
 
-## 16. AgriPro Notebook
+## 17. AgriPro Notebook
 
 45 s. The nutrient notebook: tap any nutrient to see its job and which nutrients it blocks or helps. The pH chart shows what a root can take up at each soil pH. Mixing rules explain how to avoid gelling, and the advisor suggests a recipe by crop and durian variety.
 
-## 17. Spray day: ChemLog + DroneDose
+## 18. Spray day: ChemLog + DroneDose
 
 1 min. Spray day. ChemLog Lab 2: enter tank volume and rates, get per-tank amounts and pack counts, send to workers on WhatsApp, and log every round by farm, zone and worker with stock and cost. DroneDose: pick the DJI model and tank, enter mapped area and rate, and it works out loads, water and product per tank, then copies a mixing sheet for the pilot. Both work offline.
 
-## 18. More durian apps
+## 19. More durian apps
 
 30 s, skip if behind. Pick one or two depending on the room. Borer Action and Trunk Disease Triage are the most asked-about in durian areas: tell pinhole borer from longhorn and Phytophthora before spending money. Nutrient Triage is a leaf key. TerraDurian uses NASA satellite soil moisture for the flowering signal. DurianExport covers documents and flights for selling to China (not an official SF Express app). Tap a card to show its QR.
 
-## 19. Claude: how we build
+## 20. Claude: how we build
 
 1.25 min. How can two people with day jobs build so many apps? We use Claude, an AI assistant from Anthropic, as our coding partner. We bring the farm problem, the research and the field checking; Claude writes and tests the code and helps with the three languages. Step 4 matters most: nothing goes out until we've checked it against sources and real trees. Then mention this deck was built with Claude too. (Adjust this slide if your own workflow differs.)
 
-## 20. Claude: try it
+## 21. Claude: try it
 
 1 min. Read one example aloud in the audience's language. Claude has a free plan on the web and as an Android/iPhone app; you can type in BM or Chinese and attach a photo of a leaf or a label. Then the four rules: AI can be wrong, so check the tree and ask an agronomist; MetMalaysia for official warnings; follow the pesticide label; never type passwords, IC or bank details.
 
-## 21. Thank you
+## 22. Thank you
 
-Close (≈ 1.75 min left for Q&A). Thank the organisers and growers. Take questions. Repeat the ask: tell us when a forecast or a diagnosis is wrong; that is how these apps get better for Jerantut. Leave this slide up so people can scan or copy the WhatsApp numbers.
+Close (≈ 1 min left for Q&A). Thank the organisers and growers. Take questions. Repeat the ask: tell us when a forecast or a diagnosis is wrong; that is how these apps get better for Jerantut. Leave this slide up so people can scan or copy the WhatsApp numbers.

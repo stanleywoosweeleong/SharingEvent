@@ -437,7 +437,7 @@ const SLIDES = [
       </div>
     </div>
     <div style="display:grid;grid-template-columns:repeat(4,104px);gap:18px;flex:none">
-      ${['jerantut','comparecast','rainlog-lab','rainscore-lab','duriantreescience','durianipm','amis','agriprotimeline','offseason','tigerstripe','agripro-nutrients'].map(id=>`<img src="${D.apps[id].logo}" alt="" style="width:104px;height:104px;border-radius:24px">`).join('')}
+      ${['jerantut','comparecast','rainlog-lab','rainscore-lab','duriantreescience','durianipm','amis','agriprotimeline','offseason','tigerstripe','agripro-nutrients','ndvi'].map(id=>`<img src="${D.apps[id].logo}" alt="" style="width:104px;height:104px;border-radius:24px">`).join('')}
     </div>
   </div>`,
   notes:`<b>Open (30 s).</b> Selamat pagi / 大家好. I'm Stanley Woo. My friend Bryan Woo and I share a surname, so we call ourselves Woo Brothers. In 20 minutes: a weather forecast you can trust for your own farm, a set of durian apps in the order you'd use them in a season, and how we use Claude AI to build all of this. Everything is free.` },
@@ -554,6 +554,11 @@ const SLIDES = [
     q:{en:'“Will next season be dry or wet?” El Niño means drier and hazier; La Niña means wetter. Plan flowering, drains and spraying around it.',ms:'“Musim depan kering atau basah?” El Niño bermaksud lebih kering dan berjerebu; La Niña lebih basah. Rancang pembungaan, longkang dan semburan ikut keadaan ini.',zh:'「下一季会干还是湿？」厄尔尼诺偏干、多烟霾；拉尼娜偏湿。催花、排水和喷药都可以提前安排。'}}),
   notes:`<b>45 s.</b> From days to months. ENSO Monitor reads NOAA's official RONI index and weekly Niño 3.4 sea temperature, then adds the Indian Ocean Dipole, the MJO (a wet or dry pulse every 30–60 days) and Northeast Monsoon cold surges. We are in the Northeast Monsoon now (November), so drains and Phytophthora come first. Each signal comes with orchard advice, and it links to MetMalaysia for official warnings. SUHU is the sister app for drought and haze risk.` },
 
+/* 8c */ { min:0.75, name:'NDVI Remote Sensing',
+  html: () => appSlide({id:'ndvi', kick:{en:'Satellite · see the whole farm',ms:'Satelit · lihat seluruh kebun',zh:'卫星 · 看清整个园地'},
+    q:{en:'“Which part of my farm needs a visit today?” Satellite images show the weak patches before you walk the field.',ms:'“Bahagian kebun mana perlu diperiksa hari ini?” Imej satelit tunjuk kawasan lemah sebelum anda berjalan ke ladang.',zh:'「今天该去园里哪一块看看？」巡园之前，卫星图先帮你找出长得弱的地方。'}, n:4}),
+  notes:`<b>45 s.</b> Bryan's NDVI app. It uses free Sentinel-2 satellite images (10 m pixels, a new pass every few days) to compute NDVI, a plant-health index, and NDMI, a moisture index, then marks the weaker zones of each plot and shows local weather. Instead of walking every row, go straight to the patch that looks different. Be honest about the tropics: clouds often block the view, so it uses the most recent clear image. This is also the bridge into the durian section: from the sky down to the tree.` },
+
 /* 9 */ { min:0.75, name:'Durian Tree Science',
   html: () => appSlide({id:'duriantreescience', kick:{en:'Durian · 1 · know the tree',ms:'Durian · 1 · kenali pokok',zh:'榴莲 · 1 · 认识榴莲树'},
     q:{en:'Start with the tree: how it grows, flowers, is pollinated by bats, and sets fruit.',ms:'Mula dengan pokok: cara ia tumbuh, berbunga, didebungakan kelawar dan berbuah.',zh:'先认识树：它怎么生长、开花、靠蝙蝠授粉、结果。'}}),
@@ -669,7 +674,7 @@ const SLIDES = [
         </div>
       </div>
     </div>${foot()}`,
-  notes:`<b>Close (≈ 1.75 min left for Q&A).</b> Thank the organisers and growers. Take questions. Repeat the ask: tell us when a forecast or a diagnosis is wrong; that is how these apps get better for Jerantut. Leave this slide up so people can scan or copy the WhatsApp numbers.` },
+  notes:`<b>Close (≈ 1 min left for Q&A).</b> Thank the organisers and growers. Take questions. Repeat the ask: tell us when a forecast or a diagnosis is wrong; that is how these apps get better for Jerantut. Leave this slide up so people can scan or copy the WhatsApp numbers.` },
 ];
 
 /* ---------- rendering ---------- */
