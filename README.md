@@ -7,18 +7,31 @@ Slides for the Woo Brothers sharing session in Jerantut, Pahang (Stanley Woo · 
 - `index.html`: the presentation app (logos, QR codes and fonts are built in)
 - `shots/`: app screenshots in English, Bahasa Malaysia and 中文 (`<app>-<en|ms|zh>-<n>.jpg`); the slides show the set matching the chosen language
 - `icons/`, `manifest.webmanifest`, `sw.js`: make the talk installable and available offline
-- `speaker-script.md`: timing table and speaker notes for every slide.
+- `speaker-script.md`: timing table and speaker notes for every slide
+- `speaker-cue-card.pdf`: printable cue card with both presenting options
 
-## Presenting
+## Presenting: two options
 
-Open https://stanleywoosweeleong.github.io/SharingEvent/ in Chrome on the laptop connected to the projector. To present without internet, open it once beforehand (it is then cached), or download this repository (Code → Download ZIP), unzip it, and open `index.html` from that folder so the `shots/` screenshots load.
+Print `speaker-cue-card.pdf` (slide numbers, start times and notes) for either option.
 
-| Key | Action |
+### Option A · Windows laptop
+1. Connect the projector, press **Win + P** and choose **Extend**.
+2. Open https://stanleywoosweeleong.github.io/SharingEvent/ in Chrome or Edge and drag the window to the projector screen.
+3. Press **P** for Projector Mode, then **S** for the presenter window and keep it on the laptop (current and next slide, notes, 20-minute pace timer).
+4. To present without internet, open the talk once beforehand, or download this repository (Code → Download ZIP) and open `index.html` from the unzipped folder.
+
+### Option B · Phone only
+1. Open the talk on the phone, **Add to Home Screen**, set the language and tap **Save offline** (saves every screenshot in that language).
+2. Connect the phone to the projector with an HDMI adapter (USB-C or Lightning) or screen mirroring (AirPlay, Smart View, Chromecast).
+3. Turn the phone sideways and tap **▶ Present**. Tap the right side for next, the left side to go back, or swipe. Tap the top edge for the control bar: Exit, Skip ⏭ screenshots, language, All slides, ■ Black and time left. Android phones buzz when you are 30 seconds behind plan.
+4. The audience sees the whole phone screen, so keep your notes on the printed cue card.
+
+| Key (laptop) | Action |
 |---|---|
-| → Space PgDn / ← PgUp | Next / previous slide (wireless clickers work) |
+| → Space PgDn / ← PgUp | Next / previous slide (wireless clickers work, also when paired to a phone) |
 | Shift + → / Shift + ← | Skip the optional screenshot slides |
-| P | Projector Mode: full screen, no menus, stronger contrast, screen stays awake, click to advance |
-| S | Presenter window: current and next slide, notes, 20-minute pace timer |
+| P | Projector Mode: full screen, no menus, stronger contrast, screen stays awake |
+| S | Presenter window: current and next slide, notes, pace timer |
 | B / W | Black / white screen |
 | L | Laser pointer |
 | C | Screen check: corners, colours and text sizes |
@@ -27,8 +40,7 @@ Open https://stanleywoosweeleong.github.io/SharingEvent/ in Chrome on the laptop
 | T | Bright room / dark room |
 | ? | All shortcuts |
 
-The menu bar sets the language, an optional second language under each heading, the room type and the text size.
-The CompareCast slide loads a live 7-day rain forecast for Jerantut from Open-Meteo; without internet it shows the run saved on 11 Nov 2026 and says so.
+The menu bar sets the language, an optional second language under each heading, the room type and the text size. The CompareCast slide loads a live 7-day rain forecast for Jerantut from Open-Meteo; without internet it shows the run saved on 11 Nov 2026 and says so.
 
 ## Sharing
 

@@ -76,7 +76,7 @@ Open (30 s). Selamat pagi / 大家好. I'm Stanley Woo. My friend Bryan Woo and 
 
 ## 8. CompareCast + live chart
 
-1.5 min. This chart pulls live data for Jerantut town when the laptop is online; offline it shows the run saved on 11 Nov 2026 and the label says so. Point at the highlighted day: same town, same day, very different numbers. Ask: "Which one would you trust?" Answer: whichever has been right at your farm. CompareCast shows forecast against actual rain, a gust map, MetMalaysia radar and per-plot rain reminders. If the chart is slow, press Refresh or move on.
+1.5 min. This chart pulls live data for Jerantut town when the phone or laptop is online; offline it shows the run saved on 11 Nov 2026 and the label says so. Point at the highlighted day: same town, same day, very different numbers. Ask: "Which one would you trust?" Answer: whichever has been right at your farm. CompareCast shows forecast against actual rain, a gust map, MetMalaysia radar and per-plot rain reminders. If the chart is slow, press Refresh or move on.
 
 ## 9. Inside: CompareCast
 
