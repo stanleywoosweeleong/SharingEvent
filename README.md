@@ -23,7 +23,7 @@ Print `speaker-cue-card.pdf` (slide numbers, start times and notes) for either o
 ### Option B · Phone only
 1. Open the talk on the phone, **Add to Home Screen**, set the language and tap **Save offline** (saves every screenshot in all three languages, about 7.5 MB).
 2. Connect the phone to the projector with an HDMI adapter (USB-C or Lightning) or screen mirroring (AirPlay, Smart View, Chromecast).
-3. Turn the phone sideways and tap **▶ Present**. Tap the right side for next, the left side to go back, or swipe. Tap the top edge for the control bar: Exit, Skip ⏭ screenshots, language, All slides, ■ Black and time left. Android phones buzz when you are 30 seconds behind plan.
+3. Turn the phone sideways and tap **▶ Present**. Tap the right side for next, the left side to go back, or swipe. Tap the top edge for the control bar: Exit, Skip ⏭ screenshots, language, second line, A− / A+ text size, ● Laser (drag your finger), All slides, ☀ / ☾ bright or dark, ■ Black and time left. Before presenting, **⋯ More** in the toolbar has text size, second line, room, notes (for rehearsal), all slides, screen check and help. Android phones buzz when you are 30 seconds behind plan.
 4. The audience sees the whole phone screen, so keep your notes on the printed cue card.
 
 | Key (laptop) | Action |
