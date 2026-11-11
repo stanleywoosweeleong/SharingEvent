@@ -20,8 +20,8 @@ Open `woo-jerantut-talk.html` in Chrome. Press **P** for Projector Mode, **S** f
 | 12 | AMIS · AgriMicrobe | 0.75 | 10:00 |
 | 13 | AgriPro Timeline | 1 | 10:45 |
 | 14 | Offseason Durian | 0.75 | 11:45 |
-| 15 | AgriPro Notebook | 0.75 | 12:30 |
-| 16 | Tiger Stripe | 0.75 | 13:15 |
+| 15 | Tiger Stripe | 0.75 | 12:30 |
+| 16 | AgriPro Notebook | 0.75 | 13:15 |
 | 17 | Spray day: ChemLog + DroneDose | 1 | 14:00 |
 | 18 | More durian apps | 0.5 | 15:00 |
 | 19 | Claude: how we build | 1.25 | 15:30 |
@@ -68,7 +68,7 @@ Open (30 s). Selamat pagi / 大家好. I'm Stanley Woo. My friend Bryan Woo and 
 
 ## 10. Durian Tree Science
 
-45 s. The durian section follows the order you'd meet things in a season: know the tree, protect it, keep the soil alive, time the season, feed it, fix fruit quality, then spray. Durian Tree Science is the foundation: 45 sections and 31 plates, from roots and trunk to floral induction, fruit set and fruit drop, plus how Thailand, Vietnam, Indonesia and others grow durian.
+45 s. The durian section follows the order you'd meet things in a season: know the tree, protect it, keep the soil alive, time the season, fix fruit quality, feed it, then spray. Durian Tree Science is the foundation: 45 sections and 31 plates, from roots and trunk to floral induction, fruit set and fruit drop, plus how Thailand, Vietnam, Indonesia and others grow durian.
 
 ## 11. Durian IPM
 
@@ -86,13 +86,13 @@ Open (30 s). Selamat pagi / 大家好. I'm Stanley Woo. My friend Bryan Woo and 
 
 45 s. Off-season: 8 steps from choosing the harvest month, preparing the tree, PBZ, drying the root zone, buds to bloom, holding the crop, harvest, and resetting so PBZ doesn't build up. Off-season fruit can fetch 2–3 times the peak price, but it is hard; every figure here links to a published trial.
 
-## 15. AgriPro Notebook
+## 15. Tiger Stripe
+
+45 s. Tiger stripe (老虎斑, belang harimau) is a big quality problem for Musang King. The app turns Prof. Dr. Tran Van Hau's AGRI Malaysia 2026 talk into notes and an action plan: affected trees had low leaf potassium, calcium and magnesium and high nitrogen, consistent with calcium and carbohydrate shortage. The action plan converts the paper's calcium nitrate and magnesium sulphate spray rates to the farm-shop product you actually bought. It leads into the nutrient notebook on the next slide.
+
+## 16. AgriPro Notebook
 
 45 s. The nutrient notebook: tap any nutrient to see its job and which nutrients it blocks or helps. The pH chart shows what a root can take up at each soil pH. Mixing rules explain how to avoid gelling, and the advisor suggests a recipe by crop and durian variety.
-
-## 16. Tiger Stripe
-
-45 s. Tiger stripe (老虎斑, belang harimau) is a big quality problem for Musang King. The app turns Prof. Dr. Tran Van Hau's AGRI Malaysia 2026 talk into notes and an action plan: affected trees had low leaf potassium, calcium and magnesium and high nitrogen, consistent with calcium and carbohydrate shortage. The action plan converts the paper's calcium nitrate and magnesium sulphate spray rates to the farm-shop product you actually bought. It links back to the nutrient notebook on the previous slide.
 
 ## 17. Spray day: ChemLog + DroneDose
 
