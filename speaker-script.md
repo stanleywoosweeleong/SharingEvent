@@ -49,11 +49,11 @@ Open (30 s). Selamat pagi / 大家好. I'm Stanley Woo. My friend Bryan Woo and 
 
 ## 5. Why forecasts differ
 
-45 s. Bridge to Bryan's app. Three steps: measure, compute, and every centre runs its own model. In the tropics, a model grid box is about 9 km but an afternoon thunderstorm cell is only a few km, so a model can be right about the storm and still put it over the next kampung. Treat "% chance of rain" as a chance.
+45 s. Bridge to CompareCast. Three steps: measure, compute, and every centre runs its own model. In the tropics, a model grid box is about 9 km but an afternoon thunderstorm cell is only a few km, so a model can be right about the storm and still put it over the next kampung. Treat "% chance of rain" as a chance.
 
 ## 6. CompareCast + live chart
 
-1.75 min. Bryan's app. This chart pulls live data for Jerantut town when the laptop is online; offline it shows the run saved on 11 Nov 2026 and the label says so. Point at the highlighted day: same town, same day, very different numbers. Ask: "Which one would you trust?" Answer: whichever has been right at your farm. CompareCast shows forecast against actual rain, a gust map, MetMalaysia radar and per-plot rain reminders. If the chart is slow, press Refresh or move on.
+1.75 min. This chart pulls live data for Jerantut town when the laptop is online; offline it shows the run saved on 11 Nov 2026 and the label says so. Point at the highlighted day: same town, same day, very different numbers. Ask: "Which one would you trust?" Answer: whichever has been right at your farm. CompareCast shows forecast against actual rain, a gust map, MetMalaysia radar and per-plot rain reminders. If the chart is slow, press Refresh or move on.
 
 ## 7. RainLog Lab
 
@@ -69,7 +69,7 @@ Open (30 s). Selamat pagi / 大家好. I'm Stanley Woo. My friend Bryan Woo and 
 
 ## 10. NDVI Remote Sensing
 
-45 s. Bryan's NDVI app. It uses free Sentinel-2 satellite images (10 m pixels, a new pass every few days) to compute NDVI, a plant-health index, and NDMI, a moisture index, then marks the weaker zones of each plot and shows local weather. Instead of walking every row, go straight to the patch that looks different. Be honest about the tropics: clouds often block the view, so it uses the most recent clear image. This is also the bridge into the durian section: from the sky down to the tree.
+45 s. The NDVI app uses free Sentinel-2 satellite images (10 m pixels, a new pass every few days) to compute NDVI, a plant-health index, and NDMI, a moisture index, then marks the weaker zones of each plot and shows local weather. Instead of walking every row, go straight to the patch that looks different. Be honest about the tropics: clouds often block the view, so it uses the most recent clear image. This is also the bridge into the durian section: from the sky down to the tree.
 
 ## 11. Durian Tree Science
 
