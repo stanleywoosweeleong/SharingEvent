@@ -1,15 +1,44 @@
 // Keeps the talk, its screenshots and icons available offline.
-const CACHE = 'woo-talk-202611111354';
-const FILES = ["./","index.html","manifest.webmanifest","icons/icon-192.png","icons/icon-512.png","icons/apple-touch-icon.png"];
-self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)).then(() => self.skipWaiting())); });
-self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim())); });
+const SHELL = 'woo-talk-shell-d55f3d6e9f';   // replaced on every new version
+const SHOTS = 'woo-talk-shots';             // kept across versions, so "Save offline" survives updates
+const FILES = ["index.html","manifest.webmanifest","favicon.ico","icons/icon-192.png","icons/icon-512.png","icons/apple-touch-icon.png"];
+const SCOPE = new URL('./', self.registration.scope).pathname;
+
+self.addEventListener('install', e => {
+  // cache: 'reload' skips the browser's HTTP cache, so a new version never stores an old page
+  e.waitUntil(caches.open(SHELL)
+    .then(c => Promise.all(FILES.map(f => fetch(new Request(f, { cache: 'reload' })).then(r => { if (!r.ok) throw new Error(f + ' ' + r.status); return c.put(f, r); }))))
+    .then(() => self.skipWaiting()));
+});
+self.addEventListener('activate', e => {
+  // Remove older app shells only; the screenshots cache stays
+  e.waitUntil(caches.keys()
+    .then(ks => Promise.all(ks.filter(k => k !== SHELL && k !== SHOTS && k.startsWith('woo-talk-')).map(k => caches.delete(k))))
+    .then(() => self.clients.claim()));
+});
 self.addEventListener('fetch', e => {
-  const u = new URL(e.request.url);
-  if (e.request.method !== 'GET' || u.origin !== location.origin) return;
-  if (e.request.mode === 'navigate') {
-    // Fresh page when online (always revalidated with the server, so updates show at once), cached page when not.
-    e.respondWith(fetch(e.request, { cache: 'no-cache' }).then(r => { const c = r.clone(); caches.open(CACHE).then(x => x.put('index.html', c)); return r; }).catch(() => caches.match('index.html')));
+  const req = e.request, u = new URL(req.url);
+  if (req.method !== 'GET' || u.origin !== location.origin || !u.pathname.startsWith(SCOPE)) return;
+  const rel = u.pathname.slice(SCOPE.length);
+
+  if (req.mode === 'navigate') {
+    // Only the talk itself; the PDF, the script or a mistyped link go straight to the network
+    if (rel !== '' && rel !== 'index.html') return;
+    e.respondWith(fetch(req, { cache: 'no-cache' }).then(r => {
+      if (r.ok) { const c = r.clone(); e.waitUntil(caches.open(SHELL).then(x => x.put('index.html', c))); }
+      return r;
+    }).catch(() => caches.open(SHELL).then(x => x.match('index.html'))));
     return;
   }
-  e.respondWith(caches.match(e.request).then(hit => hit || fetch(e.request).then(r => { if (r.ok && u.pathname.includes('/shots/')) { const c = r.clone(); caches.open(CACHE).then(x => x.put(e.request, c)); } return r; })));
+
+  if (rel.startsWith('shots/')) {
+    // Screenshots: saved copy first; a downloaded one is stored before the request finishes
+    e.respondWith(caches.open(SHOTS).then(c => c.match(req).then(hit => hit || fetch(req).then(async r => {
+      if (r.ok) await c.put(req, r.clone());
+      return r;
+    }))));
+    return;
+  }
+
+  e.respondWith(caches.open(SHELL).then(c => c.match(req, { ignoreSearch: true })).then(hit => hit || fetch(req)));
 });
