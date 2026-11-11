@@ -1074,7 +1074,16 @@ S.i = 0;
 if(!Number.isInteger(S.i) || S.i >= SLIDES.length) S.i = 0;
 render(false);
 loadWeather();
-if('serviceWorker' in navigator && location.protocol === 'https:' && !isPresenter){ navigator.serviceWorker.register('sw.js').catch(()=>{}); }
+if('serviceWorker' in navigator && location.protocol === 'https:' && !isPresenter){
+  // Always look for a newer version of the talk, and switch to it once it is ready
+  const hadController = !!navigator.serviceWorker.controller; let reloading = false;
+  navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).then(reg => reg.update()).catch(()=>{});
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if(!hadController || reloading) return;
+    if(root.classList.contains('proj')){ toast('Update ready: it will load next time you open the talk'); return; }
+    reloading = true; location.reload();
+  });
+}
 // Offer to continue where you left off, for a few seconds
 if(Number.isInteger(resumeAt) && resumeAt > 0 && resumeAt < SLIDES.length){
   const rb = $('#resume'); rb.textContent = `↺ ${t({en:'Continue from slide',ms:'Sambung dari slaid',zh:'从第'})} ${resumeAt+1}${S.lang==='zh'?' 页继续':''}`; rb.hidden = false;
