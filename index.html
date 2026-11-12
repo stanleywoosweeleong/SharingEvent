@@ -361,7 +361,7 @@ h1{font-size:calc(84px*var(--k));line-height:1.02;font-weight:800}
   <h3>Option A · Windows laptop</h3>
   <p>Connect the projector, press <b>Win + P</b> and choose <b>Extend</b>. Open the talk in Chrome or Edge, drag this window to the projector screen and press <b>P</b> for Projector Mode. Press <b>S</b> for the presenter window and keep it on the laptop screen: current and next slide, notes and the 20-minute pace timer. Use the arrow keys, a mouse click or a wireless clicker. If you choose <b>Duplicate</b> instead, the audience sees everything on the laptop, so leave the presenter window closed.</p>
   <h3>Option B · Phone only</h3>
-  <p>Install the talk on your phone (open stanleywoosweeleong.github.io/SharingEvent, then Add to Home Screen), tap <b>Save offline</b> (saves every screenshot in all three languages), connect the phone to the projector with an HDMI adapter or screen mirroring, turn it sideways and tap <b>▶ Present</b>. Tap the right side for the next slide, the left side to go back, or swipe. Tap the top edge for the control bar: exit, skip screenshots, language, second line, text size (A− / A+), ● Laser (keeps the laser on from slide to slide: drag to point, a quick tap still changes slides), all slides, bright/dark slides, black screen and your time. Before presenting, <b>⋯ More</b> in the toolbar has text size, second line, room, notes for rehearsal, all slides, screen check and help. To point at something, <b>press and hold</b> the slide: a red dot follows your finger until you let go. Android phones give a short buzz when you are more than 30 seconds behind plan. The audience sees everything on the phone screen, so keep your notes on the printed cue card.</p>
+  <p>Install the talk on your phone (open stanleywoosweeleong.github.io/SharingEvent, then Add to Home Screen), tap <b>Save offline</b> (saves every screenshot in all three languages), connect the phone to the projector with an HDMI adapter or screen mirroring, turn it sideways and tap <b>▶ Present</b>. Tap the right side for the next slide, the left side to go back, or swipe. Tap the top edge for the control bar: exit, skip screenshots, language, second line, text size (A− / A+), ● Laser (stays on from slide to slide: any drag places the dot, no hold needed; a quick tap still changes slides), all slides, bright/dark slides, black screen and your time. Before presenting, <b>⋯ More</b> in the toolbar has text size, second line, room, notes for rehearsal, all slides, screen check and help. To point at something, <b>press and hold</b> the slide: a red dot follows your finger and <b>stays where you lift</b>. Tap the dot to remove it; changing slides clears it. Android phones give a short buzz when you are more than 30 seconds behind plan. The audience sees everything on the phone screen, so keep your notes on the printed cue card.</p>
   <h3>Projector tips</h3>
   <p>Use <b>Bright room</b> when the lights stay on: dark text on a light slide survives a washed-out projector. Use <b>Dark room</b> in a dim hall. If the edges are cut off, choose <b>C</b> to check the corners, then set Text to Smaller. The live rain chart needs internet; without it, the slide shows the saved run from 11 Nov 2026 and says so.</p>
 </div></div>
@@ -851,6 +851,7 @@ function refreshIf(i){ if(S.i===i) render(false); }
 function go(i, from){
   i = Math.max(0, Math.min(SLIDES.length-1, i));
   const changed = i !== S.i; S.i = i;
+  if(changed && TOUCH) $('#laser').classList.remove('on','fade');   // don't leave the dot pointing at the wrong thing
   if(!isPresenter) store.set('i', i);
   if(changed && from !== 'remote' && $('#resume')) $('#resume').hidden = true;
   render(changed);
@@ -962,7 +963,8 @@ function exitProj(){
 document.addEventListener('fullscreenchange', () => { if(!document.fullscreenElement && root.classList.contains('proj')) exitProj(); setTimeout(layout, 50); });
 document.addEventListener('visibilitychange', () => { if(root.classList.contains('proj') && document.visibilityState==='visible') keepAwake(); });
 document.addEventListener('mousemove', e => {
-  if(root.classList.contains('lasering')){ const l = $('#laser'); l.style.left = e.clientX+'px'; l.style.top = e.clientY+'px'; }
+  // Mouse laser only: phones also send a 'mouse moved' event to every tap, which must not move the touch dot
+  if(root.classList.contains('lasering') && !TOUCH){ const l = $('#laser'); l.style.left = e.clientX+'px'; l.style.top = e.clientY+'px'; }
   if(!root.classList.contains('proj')) return;
   root.classList.remove('idle'); clearTimeout(idleT); idleT = setTimeout(()=>root.classList.add('idle'), 2000);
 });
@@ -1042,8 +1044,13 @@ document.addEventListener('click', e => {
   if(act){ if(act.dataset.act==='wx') loadWeather(); if(act.dataset.act==='close') closeOverlays(); return; }
   const ov = e.target.closest('.overlay'); if(ov && (e.target === ov || e.target.classList.contains('frame') || e.target.classList.contains('grid'))){ closeOverlays(); return; }
   const pb = e.target.closest('[data-p]');
-  if(pb){ const a = pb.dataset.p; if(a==='exit') exitProj(); else if(a==='prev') prev(); else if(a==='next') next(); else if(a==='skip') nextMain(); else if(a==='grid'){ openGrid(); $('#pbar').classList.remove('on'); } else if(a==='black'){ blank('black'); $('#pbar').classList.remove('on'); } else if(a==='kminus' || a==='kplus'){ stepK(a==='kplus' ? 1 : -1); } else if(a==='laser'){ toggleLaser(); if(TOUCH) toast(root.classList.contains('lasering') ? 'Laser stays on: drag to point · a quick tap still changes slides · tap ● Laser to turn off' : 'Laser off · press and hold a slide to point any time'); } else if(a==='room'){ const dark = root.dataset.room ? root.dataset.room==='dark' : matchMedia('(prefers-color-scheme: dark)').matches; setRoom(dark ? 'day' : 'dark'); } if($('#pbar').classList.contains('on')) showPbar(); return; }
+  if(pb){ const a = pb.dataset.p; if(a==='exit') exitProj(); else if(a==='prev') prev(); else if(a==='next') next(); else if(a==='skip') nextMain(); else if(a==='grid'){ openGrid(); $('#pbar').classList.remove('on'); } else if(a==='black'){ blank('black'); $('#pbar').classList.remove('on'); } else if(a==='kminus' || a==='kplus'){ stepK(a==='kplus' ? 1 : -1); } else if(a==='laser'){ toggleLaser(); if(TOUCH) toast(root.classList.contains('lasering') ? 'Laser on: drag to place the dot · it stays when you lift · tap the dot to remove it' : 'Laser off · press and hold a slide to point any time'); } else if(a==='room'){ const dark = root.dataset.room ? root.dataset.room==='dark' : matchMedia('(prefers-color-scheme: dark)').matches; setRoom(dark ? 'day' : 'dark'); } if($('#pbar').classList.contains('on')) showPbar(); return; }
   if(Date.now() < suppressUntil && e.target.closest('#vp')) return;
+  const dotEl = $('#laser');
+  if(TOUCH && root.classList.contains('proj') && dotEl.classList.contains('on') && e.target.closest('#vp')){
+    const r = dotEl.getBoundingClientRect();
+    if(Math.hypot(e.clientX - (r.left + r.width/2), e.clientY - (r.top + r.height/2)) < 48){ hideDot(); return; }   // tap the dot to remove it
+  }
   if(root.classList.contains('proj') && e.target.closest('#vp') && !e.target.closest('button,a,select')){
     const x = e.clientX / innerWidth, y = e.clientY / innerHeight;
     if(y < 0.15){ togglePbar(); return; }
@@ -1077,7 +1084,8 @@ vp.addEventListener('touchmove', e => {
 vp.addEventListener('touchend', e => {
   clearTimeout(holdT);
   // The browser may send one click right after a pointing gesture; ignore only that one (it never comes after a long press)
-  if(pointing){ pointing = false; hideDot(); suppressUntil = Date.now() + 200; tx = null; tStart = null; return; }
+  // Lifting the finger leaves the dot where it is, so you don't have to keep holding
+  if(pointing){ pointing = false; suppressUntil = Date.now() + 200; tx = null; tStart = null; return; }
   const swiped = tx !== null && Math.abs(e.changedTouches[0].clientX - tx) > 50;
   if(swiped && !root.classList.contains('lasering')){ (e.changedTouches[0].clientX - tx) < 0 ? next() : prev(); }
   tx = null; tStart = null;
