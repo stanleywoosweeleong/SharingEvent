@@ -84,7 +84,7 @@ em{font-style:normal;color:var(--accent)}
 .btn kbd{font-family:var(--mono);font-size:11px;opacity:.75;border:1px solid currentColor;border-radius:4px;padding:0 4px}
 .btn svg{width:16px;height:16px}
 
-.viewport{flex:1;position:relative;min-height:0;overflow:hidden}
+.viewport{flex:1;position:relative;min-height:0;overflow:hidden;touch-action:pan-y pinch-zoom}   /* sideways swipes go to the talk */
 .frame{position:absolute;left:50%;top:50%;width:1600px;height:900px;transform-origin:0 0}
 .nav{display:flex;align-items:center;gap:12px;background:var(--bar);color:var(--on-deep);border-top:1px solid var(--deep-line);
   padding-block:8px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));font-size:13px}
@@ -110,7 +110,8 @@ em{font-style:normal;color:var(--accent)}
 .laser.on{display:block}
 .laser.fade{opacity:0;transition:opacity .4s}
 /* No text selection or copy menu when pressing and holding to point */
-.proj .viewport{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.proj .viewport{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:none}
+.proj .viewport img{-webkit-user-drag:none;pointer-events:none}
 .proj.lasering .viewport{cursor:none}
 .toast{position:fixed;left:50%;bottom:max(24px,env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:#0F2419;color:#F3F2E7;
   padding:10px 16px;border-radius:8px;font-size:14px;z-index:70;opacity:0;transition:opacity .2s;pointer-events:none;max-width:calc(100% - 32px);text-align:center}
@@ -1045,50 +1046,65 @@ document.addEventListener('click', e => {
   const ov = e.target.closest('.overlay'); if(ov && (e.target === ov || e.target.classList.contains('frame') || e.target.classList.contains('grid'))){ closeOverlays(); return; }
   const pb = e.target.closest('[data-p]');
   if(pb){ const a = pb.dataset.p; if(a==='exit') exitProj(); else if(a==='prev') prev(); else if(a==='next') next(); else if(a==='skip') nextMain(); else if(a==='grid'){ openGrid(); $('#pbar').classList.remove('on'); } else if(a==='black'){ blank('black'); $('#pbar').classList.remove('on'); } else if(a==='kminus' || a==='kplus'){ stepK(a==='kplus' ? 1 : -1); } else if(a==='laser'){ toggleLaser(); if(TOUCH) toast(root.classList.contains('lasering') ? 'Laser on: drag to place the dot · it stays when you lift · tap the dot to remove it' : 'Laser off · press and hold a slide to point any time'); } else if(a==='room'){ const dark = root.dataset.room ? root.dataset.room==='dark' : matchMedia('(prefers-color-scheme: dark)').matches; setRoom(dark ? 'day' : 'dark'); } if($('#pbar').classList.contains('on')) showPbar(); return; }
-  if(Date.now() < suppressUntil && e.target.closest('#vp')) return;
-  const dotEl = $('#laser');
-  if(TOUCH && root.classList.contains('proj') && dotEl.classList.contains('on') && e.target.closest('#vp')){
-    const r = dotEl.getBoundingClientRect();
-    if(Math.hypot(e.clientX - (r.left + r.width/2), e.clientY - (r.top + r.height/2)) < 48){ hideDot(); return; }   // tap the dot to remove it
-  }
+  // A finger tap on the slide is handled by the pointer code below; ignore the click the browser sends after it
+  if(e.target.closest('#vp') && Date.now() < touchTapUntil) return;
   if(root.classList.contains('proj') && e.target.closest('#vp') && !e.target.closest('button,a,select')){
-    const x = e.clientX / innerWidth, y = e.clientY / innerHeight;
+    const y = e.clientY / innerHeight;
     if(y < 0.15){ togglePbar(); return; }
     $('#pbar').classList.remove('on');
-    (TOUCH && x < 0.3) ? prev() : next();   // touch: left side goes back; mouse: click anywhere for next
+    next();   // mouse: click anywhere for next
   }
 });
 vp.addEventListener('contextmenu', e => { if(root.classList.contains('proj')){ e.preventDefault(); if(!TOUCH) prev(); } });
-let tx = null, tStart = null, holdT = null, pointing = false, suppressUntil = 0, fadeT = null;
-/* Laser on touch screens:
-   - press and hold (0.45 s) anywhere on a slide to point, at any time, no menu needed
-   - with ● Laser switched on in the control bar, any drag points straight away
-   - a quick tap still changes slides in both cases, so the laser can stay on from slide to slide */
+/* ---------- fingers on the slide (pointer events: one input system on iPhone and Android) ----------
+   In Present mode:
+   - quick tap: right side next, left side back, top edge control bar, on the laser dot = remove the dot
+   - press and hold (0.45 s): the laser dot appears and follows the finger; it stays where you lift
+   - with ● Laser on: any drag places the dot straight away
+   Outside Present mode: swipe left or right to change slides.
+   The slide area has touch-action:none while presenting, so the browser never turns a drag into a pan or zoom,
+   and pointer capture keeps the finger tracked even if the slide redraws under it. */
+let fp = null, holdT = null, fadeT = null, touchTapUntil = 0;
 function showDot(x, y){ const l = $('#laser'); clearTimeout(fadeT); l.classList.remove('fade'); l.style.left = x+'px'; l.style.top = y+'px'; l.classList.add('on'); }
 function hideDot(){ const l = $('#laser'); l.classList.add('fade'); clearTimeout(fadeT); fadeT = setTimeout(() => l.classList.remove('on','fade'), 450); }
-vp.addEventListener('touchstart', e => {
-  const t = e.touches[0]; tx = t.clientX;
-  if(!root.classList.contains('proj') || e.touches.length > 1){ tStart = null; return; }
-  tStart = { x: t.clientX, y: t.clientY, moved: false };
+function endFinger(){ clearTimeout(holdT); fp = null; }
+vp.addEventListener('pointerdown', e => {
+  if(e.pointerType === 'mouse' || !e.isPrimary) return;
+  if(e.target.closest('button,a,select,[data-app],[data-act],[data-go]')) { fp = null; return; }   // let cards and buttons work as usual
+  fp = { id: e.pointerId, x: e.clientX, y: e.clientY, t: Date.now(), moved: false, pointing: false };
+  if(!root.classList.contains('proj')) return;
+  try{ vp.setPointerCapture(e.pointerId); }catch(err){}
   clearTimeout(holdT);
-  holdT = setTimeout(() => { if(!tStart) return; pointing = true; showDot(tStart.x, tStart.y); try{ navigator.vibrate && navigator.vibrate(15); }catch(err){} }, 450);
-}, {passive:true});
-vp.addEventListener('touchmove', e => {
-  if(!tStart) return;
-  const t = e.touches[0];
-  if(Math.hypot(t.clientX - tStart.x, t.clientY - tStart.y) > 12) tStart.moved = true;
-  if(!pointing && tStart.moved && root.classList.contains('lasering')){ clearTimeout(holdT); pointing = true; }
-  if(pointing){ showDot(t.clientX, t.clientY); e.preventDefault(); return; }
-  if(tStart.moved) clearTimeout(holdT);
-}, {passive:false});
-vp.addEventListener('touchend', e => {
-  clearTimeout(holdT);
-  // The browser may send one click right after a pointing gesture; ignore only that one (it never comes after a long press)
-  // Lifting the finger leaves the dot where it is, so you don't have to keep holding
-  if(pointing){ pointing = false; suppressUntil = Date.now() + 200; tx = null; tStart = null; return; }
-  const swiped = tx !== null && Math.abs(e.changedTouches[0].clientX - tx) > 50;
-  if(swiped && !root.classList.contains('lasering')){ (e.changedTouches[0].clientX - tx) < 0 ? next() : prev(); }
-  tx = null; tStart = null;
+  holdT = setTimeout(() => { if(!fp || fp.moved) return; fp.pointing = true; showDot(fp.x, fp.y); try{ navigator.vibrate && navigator.vibrate(15); }catch(err){} }, 450);
+});
+vp.addEventListener('pointermove', e => {
+  if(!fp || e.pointerId !== fp.id) return;
+  if(Math.hypot(e.clientX - fp.x, e.clientY - fp.y) > 12) fp.moved = true;
+  if(!root.classList.contains('proj')) return;
+  if(!fp.pointing && fp.moved && root.classList.contains('lasering')){ clearTimeout(holdT); fp.pointing = true; }
+  if(fp.pointing){ showDot(e.clientX, e.clientY); return; }
+  if(fp.moved) clearTimeout(holdT);
+});
+vp.addEventListener('pointerup', e => {
+  if(!fp || e.pointerId !== fp.id) return;
+  const f = fp; endFinger();
+  touchTapUntil = Date.now() + 700;            // the browser's own click for this finger is ignored; we decide here
+  const proj = root.classList.contains('proj'), dx = e.clientX - f.x;
+  if(f.pointing) return;                         // lifting leaves the dot where it is
+  if(!f.moved){
+    if(!proj) { touchTapUntil = 0; return; }     // normal view: let the click do its usual job
+    const x = e.clientX / innerWidth, y = e.clientY / innerHeight, l = $('#laser');
+    if(y < 0.15){ togglePbar(); return; }
+    if(l.classList.contains('on')){ const r = l.getBoundingClientRect(); if(Math.hypot(e.clientX - (r.left + r.width/2), e.clientY - (r.top + r.height/2)) < 48){ hideDot(); return; } }
+    $('#pbar').classList.remove('on');
+    x < 0.3 ? prev() : next();
+    return;
+  }
+  if(Math.abs(dx) > 50 && !root.classList.contains('lasering')) dx < 0 ? next() : prev();   // swipe
+});
+vp.addEventListener('pointercancel', e => {
+  // The system took over the touch (edge swipe, notification, etc.): stop cleanly, keep any dot where it was
+  if(fp && e.pointerId === fp.id) endFinger();
 });
 
 $('#bNext').onclick = next; $('#bPrev').onclick = prev;
