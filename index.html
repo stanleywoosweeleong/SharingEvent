@@ -844,10 +844,32 @@ function render(anim=true){
   if($('#pbar').classList.contains('on')) updatePbar();
   layout();
 }
+/* Present mode: fit the slide inside what the screen really shows. On iPhone that excludes the Dynamic Island,
+   rounded corners and home bar (safe area) and Safari's toolbars (visual viewport). An HDMI mirror shows the whole
+   picture, so without this the projector looked fine while the phone itself hid the slide's edges. */
+const safeProbe = document.createElement('div');
+safeProbe.style.cssText = 'position:fixed;left:0;top:0;width:0;height:0;visibility:hidden;pointer-events:none;padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px)';
+document.body.appendChild(safeProbe);
+function fitPresent(){
+  const cs = getComputedStyle(safeProbe), px = v => parseFloat(v) || 0;
+  const t = px(cs.paddingTop), r = px(cs.paddingRight), b = px(cs.paddingBottom), l = px(cs.paddingLeft);
+  const vv = window.visualViewport, vr = vp.getBoundingClientRect();
+  const vw = vv ? vv.width : innerWidth, vh = vv ? vv.height : innerHeight;
+  const ox = vv ? vv.offsetLeft : 0, oy = vv ? vv.offsetTop : 0;
+  const W = Math.max(1, vw - l - r - 8), H = Math.max(1, vh - t - b - 8);          // 4 px breathing room on each side
+  const sc = Math.min(W/1600, H/900);
+  const x = ox + l + 4 + (W - 1600*sc)/2 - vr.left, y = oy + t + 4 + (H - 900*sc)/2 - vr.top;
+  frame.style.left = '0px'; frame.style.top = '0px';
+  frame.style.transform = `translate(${x}px,${y}px) scale(${sc})`;
+}
 function layout(){
   if(isPresenter){ fit($('#pvFrame'), $('#pvStage')); fitCorner($('#pvNextFrame'), $('#pvNextBox')); return; }
-  fit(frame, vp, root.classList.contains('proj') ? 1 : 0.97);
+  if(root.classList.contains('proj')){ fitPresent(); return; }
+  frame.style.left = ''; frame.style.top = '';
+  fit(frame, vp, 0.97);
 }
+if(window.visualViewport){ visualViewport.addEventListener('resize', () => { if(root.classList.contains('proj')) layout(); }); visualViewport.addEventListener('scroll', () => { if(root.classList.contains('proj')) layout(); }); }
+window.addEventListener('orientationchange', () => setTimeout(layout, 300));
 function refreshIf(i){ if(S.i===i) render(false); }
 
 function go(i, from){
@@ -948,7 +970,10 @@ async function saveOffline(){
 }
 let wake = null, idleT = null;
 async function keepAwake(){ try{ if('wakeLock' in navigator && document.visibilityState==='visible') wake = await navigator.wakeLock.request('screen'); }catch(e){ wake = null; } }
+const viewportMeta = document.querySelector('meta[name="viewport"]'), viewportNormal = viewportMeta ? viewportMeta.content : '';
 function enterProj(){
+  // Undo any accidental pinch or double-tap zoom so the slide is shown at its real size
+  if(viewportMeta) viewportMeta.content = 'width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover';
   root.classList.add('proj');
   const el = document.documentElement;
   if(el.requestFullscreen && !document.fullscreenElement) el.requestFullscreen().then(() => { try{ screen.orientation && screen.orientation.lock && screen.orientation.lock('landscape').catch(()=>{}); }catch(e){} }).catch(()=>{});
@@ -959,6 +984,7 @@ function enterProj(){
   toast(TOUCH ? 'Tap right side: next · left side: back · top edge: menu' : 'Projector Mode · click or → for next · B blank · L laser · Esc to leave');
 }
 function exitProj(){
+  if(viewportMeta) viewportMeta.content = viewportNormal;
   $('#pbar').classList.remove('on');
   try{ screen.orientation && screen.orientation.unlock && screen.orientation.unlock(); }catch(e){}
   root.classList.remove('proj','idle','lasering','portrait'); $('#laser').classList.remove('on');
