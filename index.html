@@ -325,6 +325,7 @@ h1{font-size:calc(84px*var(--k));line-height:1.02;font-weight:800}
     <div class="ctrls" style="margin-left:auto">
       <button class="btn primary" id="pvStart" type="button">Start timer</button>
       <button class="btn" id="pvReset" type="button">Reset</button>
+      <button class="btn" id="pvClose" type="button" title="Close the presenter window (Esc)">✕ Close</button>
       <button class="btn" id="pvPrev" type="button">◀ Back</button>
       <button class="btn primary" id="pvNext" type="button">Next ▶</button>
       <button class="btn" id="pvSkip" type="button">Skip screenshots ⏭</button>
@@ -349,7 +350,7 @@ h1{font-size:calc(84px*var(--k));line-height:1.02;font-weight:800}
     <dt>Home / End</dt><dd>First or last slide</dd>
     <dt>7 Enter</dt><dd>Type a number, then Enter, to jump to that slide</dd>
     <dt>P</dt><dd>Projector Mode: full screen, no menus, stronger contrast, screen stays awake, click to advance</dd>
-    <dt>S</dt><dd>Presenter view: current and next slide, notes, 20-minute pace timer</dd>
+    <dt>S</dt><dd>Presenter view: current and next slide, notes, 20-minute pace timer. Close it with ✕ Close or Esc</dd>
     <dt>B or .</dt><dd>Black screen (press again to return)</dd>
     <dt>W</dt><dd>White screen</dd>
     <dt>L</dt><dd>Laser pointer</dd>
@@ -668,7 +669,7 @@ const SLIDES = [
       </div>
     </div>
     <div style="display:flex;gap:18px;align-items:center;margin-top:-10px">${wxStatus()} <button type="button" class="btn" data-act="wx" style="font-size:20px">${t({en:'Refresh',ms:'Muat semula',zh:'刷新'})}</button>
-      <span class="tiny muted">${t({en:'Daily rain, mm · Jerantut town 3.94°N 102.36°E · open-meteo.com',ms:'Hujan harian, mm · Bandar Jerantut 3.94°U 102.36°T · open-meteo.com',zh:'每日雨量（毫米）· 而连突市区 3.94°N 102.36°E · open-meteo.com'})}</span></div>`; },
+      <span class="tiny muted">${t({en:'Daily rain, mm · Jerantut town 3.94°N 102.36°E · open-meteo.com',ms:'Hujan harian, mm · Bandar Jerantut 3.94°U 102.36°T · open-meteo.com',zh:'每日雨量（毫米）· 而连突市区 3.94°N 102.36°E · open-meteo.com'})}</span></div>${foot()}`; },
   notes:`<b>1.5 min.</b> This chart pulls live data for Jerantut town when the phone or laptop is online; offline it shows the run saved on 11 Nov 2026 and the label says so. Point at the highlighted day: same town, same day, very different numbers. Ask: "Which one would you trust?" Answer: whichever has been right at <i>your</i> farm. CompareCast shows forecast against actual rain, a gust map, MetMalaysia radar and per-plot rain reminders. If the chart is slow, press Refresh or move on.` },
 
 /* 7 */ { min:0.75, name:'RainLog Lab',
@@ -1019,6 +1020,7 @@ document.addEventListener('keydown', e => {
   if(e.ctrlKey || e.metaKey || e.altKey) return;
   const k = e.key; const b = $('#blank');
   if(b.className !== 'blank'){ b.className = 'blank'; e.preventDefault(); return; }
+  if(k === 'Escape' && isPresenter && !anyOverlay()){ closePresenter(); return; }
   if(k === 'Escape'){ if(anyOverlay()) closeOverlays(); else if(root.classList.contains('lasering')) toggleLaser(); else if(root.classList.contains('proj')) exitProj(); return; }
   if(/^[0-9]$/.test(k)){ numBuf += k; clearTimeout(numT); numT = setTimeout(()=>numBuf='', 1500); toast('Go to slide ' + numBuf + ' · press Enter'); return; }
   if(k === 'Enter' && numBuf){ closeOverlays(); go(parseInt(numBuf,10)-1); numBuf=''; e.preventDefault(); return; }
@@ -1055,7 +1057,7 @@ document.addEventListener('click', e => {
     const y = e.clientY / innerHeight;
     if(y < 0.15){ togglePbar(); return; }
     $('#pbar').classList.remove('on');
-    next();   // mouse: click anywhere for next
+    (e.clientX / innerWidth < 0.3) ? prev() : next();   // mouse: left side goes back, elsewhere forward (same as on phones)
   }
 });
 vp.addEventListener('contextmenu', e => { if(root.classList.contains('proj')){ e.preventDefault(); if(!TOUCH) prev(); } });
@@ -1120,7 +1122,10 @@ $('#bGrid').onclick = openGrid;
 $('#bHelp').onclick = () => $('#ovHelp').classList.add('on');
 $('#bNotes').onclick = () => { $('#notes').classList.toggle('on'); layout(); };
 $('#bPresenter').onclick = openPresenter;
-$('#pvNext').onclick = next; $('#pvPrev').onclick = prev; $('#pvSkip').onclick = nextMain;
+$('#pvNext').onclick = next; $('#pvPrev').onclick = prev;
+/* Close the presenter window; if it was opened by hand (not by the S key), go back to the normal slides view instead */
+function closePresenter(){ try{ window.close(); }catch(e){} setTimeout(() => { if(!window.closed) location.href = location.pathname + location.search; }, 300); }
+$('#pvClose').onclick = closePresenter; $('#pvSkip').onclick = nextMain;
 $('#pvStart').onclick = () => { if(T.start){ T.acc = elapsed(); T.start = null; $('#pvStart').textContent='Resume timer'; } else { T.start = Date.now(); $('#pvStart').textContent='Pause timer'; } tick(); };
 $('#pvReset').onclick = () => { T.start = null; T.acc = 0; $('#pvStart').textContent='Start timer'; tick(); };
 

@@ -30,8 +30,8 @@ Print `speaker-cue-card.pdf` (slide numbers, start times and notes) for either o
 |---|---|
 | → Space PgDn / ← PgUp | Next / previous slide (wireless clickers work, also when paired to a phone) |
 | Shift + → / Shift + ← | Skip the optional screenshot slides |
-| P | Projector Mode: full screen, no menus, stronger contrast, screen stays awake |
-| S | Presenter window: current and next slide, notes, pace timer |
+| P | Projector Mode: full screen, no menus, stronger contrast, screen stays awake. Click the right side for next, the left side to go back; Esc leaves |
+| S | Presenter window: current and next slide, notes, pace timer (close it with ✕ Close or Esc) |
 | B / W | Black / white screen |
 | L | Laser pointer |
 | C | Screen check: corners, colours and text sizes |
