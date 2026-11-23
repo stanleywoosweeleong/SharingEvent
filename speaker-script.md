@@ -183,7 +183,7 @@ Open (30 s). Selamat pagi / 大家好. I'm Stanley Woo. My friend Bryan Woo and 
 
 ## 34. Spray day: ChemLog + DroneDose
 
-45 s. Q3 (cost), Q7 and Q12 (drones). Spray day. ChemLog Lab 2: enter tank volume and rates, get per-tank amounts and pack counts, send to workers on WhatsApp, and log every round by farm, zone and worker with stock and cost. DroneDose: pick the DJI model and tank, enter mapped area and rate, and it works out loads, water and product per tank, then copies a mixing sheet for the pilot. Both work offline. Q3, cost: ChemLog's stock and cost log shows where money goes, and the right dose per tank stops over-mixing. Q12 asks about nozzle count and position, best flight settings, and how much spray actually lands at the top, the bottom and under the canopy on slopes. DroneDose does not measure that; say so honestly. Answer from field experience, and suggest a simple water-sensitive-paper test at the top, middle and bottom of a slope; we would welcome sharing that data.
+45 s. Q3 (cost) and Q7 (drones). Spray day. ChemLog Lab 2: enter tank volume and rates, get per-tank amounts and pack counts, send to workers on WhatsApp, and log every round by farm, zone and worker with stock and cost. DroneDose: pick the DJI model and tank, enter mapped area and rate, and it works out loads, water and product per tank, then copies a mixing sheet for the pilot. Both work offline. Q3, cost: ChemLog's stock and cost log shows where money goes, and the right dose per tank stops over-mixing. Q12 (nozzle count and position, flight settings, spray coverage on slopes) will be answered by our guest who runs a drone rental operation: hand it over to them.
 
 ## 35. Inside: ChemLog Lab 2 + DroneDose
 
@@ -203,7 +203,7 @@ Open (30 s). Selamat pagi / 大家好. I'm Stanley Woo. My friend Bryan Woo and 
 
 ## 39. Your questions map
 
-Use during the Q&A. Read a question number from the list, find its card, tap the app to show its QR code and screenshots full screen, answer, then Esc. Q12 (drone nozzles, flight settings, spray coverage on slopes) is not covered by any app yet: answer from experience and invite the farmer to share field data. Q18 (关于榴莲, general): point to woobrothers.my.
+Use during the Q&A. Read a question number from the list, find its card, tap the app to show its QR code and screenshots full screen, answer, then Esc. Q12 (drone nozzles, flight settings, spray coverage on slopes): hand over to our drone rental guest. Q18 (关于榴莲, general): point to woobrothers.my.
 
 ## 40. Thank you
 
