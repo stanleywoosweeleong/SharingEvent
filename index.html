@@ -708,8 +708,8 @@ const SLIDES = [
   notes:`<b>30 s. Answers Q4 (青蚊 leafhopper, stem borer), Q6 (pest prevention) and Q14 (fruit pests).</b> Durian IPM: tap where the problem is and what you see; it places it in one of about 22 pest groups. Non-chemical steps come first, then organic and conventional options ranked by effect. It suggests a rotation from your last spray so you don't repeat a mode of action, and warns about bees at flowering, harvest intervals and banned products.` },
 
 /* 10b */ { min:0.75, name:'Durian Trunk Disease Triage',
-  html: () => appSlide({id:'durian-trunk', qs:[4,5,7,10,11,16], kick:{en:'Durian · 3 · black head & trunk disease',ms:'Durian · 3 · reput akar & penyakit batang',zh:'榴莲 · 3 · 黑头病与树干病害'},
-    q:{en:'“Is it black head (Phytophthora), dieback, canker or Fusarium?” They look alike but need different treatment. Tick only what you see.',ms:'“Reput akar (Phytophthora), mati rosot, kanser atau Fusarium?” Nampak serupa tetapi rawatannya berbeza. Tanda apa yang anda nampak sahaja.',zh:'「是黑头病（疫霉）、回枯、溃疡还是镰刀菌？」看起来很像，治法却完全不同。只勾选你真正看到的症状。'}}),
+  html: () => appSlide({id:'durian-trunk', qs:[4,5,7,10,11,16], kick:{en:'Durian · 3 · canker & trunk disease',ms:'Durian · 3 · reput akar & penyakit batang',zh:'榴莲 · 3 · 黑头病与树干病害'},
+    q:{en:'“Is it canker (Phytophthora), dieback or Fusarium?” They look alike but need different treatment. Tick only what you see.',ms:'“Reput akar (Phytophthora), mati rosot, kanser atau Fusarium?” Nampak serupa tetapi rawatannya berbeza. Tanda apa yang anda nampak sahaja.',zh:'「是黑头病（疫霉）、回枯、溃疡还是镰刀菌？」看起来很像，治法却完全不同。只勾选你真正看到的症状。'}}),
   notes:`<b>30 s. Answers Q5, Q7, Q10, Q11, Q16 (and the 干枝病 part of Q4): the most-asked topic.</b> 黑头病 is Phytophthora palmivora: a wet, dark patch on the bark, reddish-brown gum, a sour smell, and no holes of its own. It is a water mould, not a true fungus, so many fungicides don't touch it. Fusarium usually comes in through borer pinholes; dieback (Botryosphaeriaceae) kills from the branch tips; root disease shows a wilting tree with a clean trunk. The app has you tick only visible symptoms, rules out non-disease causes first so you don't spray for nothing, then covers fungicide choice and resistance. Prevention is drainage: point back to the Phytophthora risk score in the Jerantut app and TerraDurian's drainage check. Durian Borer Action separates pinhole borer from 黑头病 when there are holes.` },
 
 /* 11 */ { min:0.75, name:'AMIS · AgriMicrobe',
@@ -806,7 +806,7 @@ const SLIDES = [
 
 /* 17b */ { min:0.25, name:'Your questions map',
   html: () => { const T = [
-      [{en:'Black head (Phytophthora) & trunk disease',ms:'Reput akar (Phytophthora) & penyakit batang',zh:'黑头病（疫霉）与树干病害'},[4,5,7,10,11,16],['durian-trunk','jerantut','amis','durian-borer']],
+      [{en:'Canker (Phytophthora) & trunk disease',ms:'Reput akar (Phytophthora) & penyakit batang',zh:'黑头病（疫霉）与树干病害'},[4,5,7,10,11,16],['durian-trunk','jerantut','amis','durian-borer']],
       [{en:'Pests: leafhopper, stem borer, fruit pests',ms:'Perosak: bena hijau, pengorek batang, perosak buah',zh:'虫害：青蚊、蛀干虫、果实虫害'},[4,6,14],['durianipm','durian-borer','pest-moa']],
       [{en:'Flowering, fruit set & yield',ms:'Pembungaan, buah jadi & hasil',zh:'开花、保果与产量'},[1,2,6,9,17],['agriprotimeline','agripro-nutrients','cn-garden','offseason','duriantreescience']],
       [{en:'Fruit quality & tiger stripe',ms:'Kualiti buah & belang harimau',zh:'果实品质与老虎斑'},[8,9,15],['tigerstripe','nutrienttriage','agripro-nutrients']],
@@ -818,11 +818,10 @@ const SLIDES = [
       {en:'Your 18 questions, and where the answers are',ms:'18 soalan anda, dan di mana jawapannya',zh:'你们的 18 个问题，答案在这里'})}
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;align-content:start">
       ${T.map(([title,qs,ids,extra])=>`<div class="card" style="display:flex;flex-direction:column;gap:8px;padding:14px 16px;min-width:0">
-        <b style="font-family:var(--display);font-size:27px;line-height:1.15">${t(title)}</b>
+        <b style="font-family:var(--display);font-size:calc(24px*var(--k));line-height:1.12">${t(title)}</b>
         <div class="tiny gold" style="font-weight:800">${qs.map(n=>'Q'+n).join(' · ')}</div>
         <div style="display:flex;flex-wrap:wrap;gap:6px">${ids.map(pill).join('')}</div>${extra ? `<div class="tiny muted" style="font-weight:700">${t(extra)}</div>` : ''}</div>`).join('')}
-    </div>
-    <div class="small muted">${t({en:'Tap an app to show its QR code and screenshots.',ms:'Tekan aplikasi untuk tunjuk kod QR dan tangkapan skrin.',zh:'点任何一个软件，显示二维码和截图。'})}</div>${foot()}`; },
+    </div>${foot()}`; },
   notes:`<b>Use during the Q&A.</b> Read a question number from the list, find its card, tap the app to show its QR code and screenshots full screen, answer, then Esc. Q12 (drone nozzles, flight settings, spray coverage on slopes): hand over to our drone rental guest. Q18 (关于榴莲, general): point to woobrothers.my.` },
 
 /* 18 */ { min:0.5, name:'Thank you', deep:true,
