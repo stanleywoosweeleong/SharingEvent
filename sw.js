@@ -21,24 +21,34 @@ self.addEventListener('fetch', e => {
   if (req.method !== 'GET' || u.origin !== location.origin || !u.pathname.startsWith(SCOPE)) return;
   const rel = u.pathname.slice(SCOPE.length);
 
-  if (req.mode === 'navigate') {
-    // Only the talk itself; the PDF, the script or a mistyped link go straight to the network
-    if (rel !== '' && rel !== 'index.html') return;
-    e.respondWith(fetch(req, { cache: 'no-cache' }).then(r => {
-      if (r.ok) { const c = r.clone(); e.waitUntil(caches.open(SHELL).then(x => x.put('index.html', c))); }
-      return r;
-    }).catch(() => caches.open(SHELL).then(x => x.match('index.html'))));
+  // A quiet reply when something is neither saved nor reachable, instead of an uncaught 'Failed to fetch'
+  const offline = () => new Response('Offline', { status: 503, statusText: 'Offline', headers: { 'Content-Type': 'text/plain' } });
+  const savedPage = () => caches.open(SHELL).then(x => x.match('index.html'));
+
+  if (rel === '' || rel === 'index.html') {
+    // The talk itself, for any kind of request (a page visit, or Chrome's own offline check of the start page):
+    // fresh copy when online, saved copy when not.
+    if (req.mode === 'navigate') {
+      e.respondWith(fetch(req.url, { cache: 'no-cache', credentials: 'same-origin' }).then(r => {
+        if (r.ok) { const c = r.clone(); e.waitUntil(caches.open(SHELL).then(x => x.put('index.html', c))); }
+        return r;
+      }).catch(() => savedPage().then(hit => hit || offline())));
+    } else {
+      e.respondWith(savedPage().then(hit => hit || fetch(req).catch(offline)));
+    }
     return;
   }
+  // Other pages (the PDF, the script, a mistyped link) go straight to the network
+  if (req.mode === 'navigate') return;
 
   if (rel.startsWith('shots/')) {
     // Screenshots: saved copy first; a downloaded one is stored before the request finishes
     e.respondWith(caches.open(SHOTS).then(c => c.match(req).then(hit => hit || fetch(req).then(async r => {
       if (r.ok) await c.put(req, r.clone());
       return r;
-    }))));
+    }))).catch(offline));
     return;
   }
 
-  e.respondWith(caches.open(SHELL).then(c => c.match(req, { ignoreSearch: true })).then(hit => hit || fetch(req)));
+  e.respondWith(caches.open(SHELL).then(c => c.match(req, { ignoreSearch: true })).then(hit => hit || fetch(req)).catch(offline));
 });
