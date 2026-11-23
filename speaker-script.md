@@ -56,7 +56,7 @@ Open (30 s). Selamat pagi / 大家好. I'm Stanley Woo. My friend Bryan Woo and 
 
 ## 3. woobrothers.my
 
-1.25 min. Show woobrothers.my first: it is the home for everything today, so if people remember one thing, it's this address. We are not a company and sell nothing, and new apps keep arriving, so we don't quote a number. Bryan and I are good friends who build these together. Every app has BM, English and 中文. Invite them to scan now and add it to the home screen; every app in this talk is linked from there.
+1.25 min. Show woobrothers.my first: it is the home for everything today, so if people remember one thing, it's this address. We are not a company and sell nothing, and new apps keep arriving, so we don't quote a number. Point to the photo: that's Bryan and me, and the hand sign is a W, for Woo. We're good friends who build these together. Every app has BM, English and 中文. Invite them to scan now and add it to the home screen; every app in this talk is linked from there.
 
 ## 4. WeatherNext Jerantut
 
