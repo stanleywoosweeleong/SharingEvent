@@ -2,7 +2,7 @@
   "name": "Woo Brothers · Jerantut talk",
   "short_name": "Woo Talk",
   "description": "Weather & durian: free farm apps for Agriculture. Slides, app links and screenshots.",
-  "id": "./",
+  "id": "/SharingEvent/",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
