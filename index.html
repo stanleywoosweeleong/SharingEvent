@@ -749,7 +749,7 @@ const SLIDES = [
       ${col('chemlog',{en:'Knapsack or tank: how much of each product, how many packs? Send it to workers on WhatsApp.',ms:'Pam galas atau tangki: berapa banyak setiap produk, berapa pek? Hantar kepada pekerja melalui WhatsApp.',zh:'背负式或大桶：每种药放多少、要几包？直接 WhatsApp 发给工人。'})}
       ${col('dronedose',{en:'A drone cannot use a knapsack dilution. Loads, water and product per tank for DJI Agras.',ms:'Dron tidak boleh guna bancuhan pam galas. Bilangan muatan, air dan produk setiap tangki untuk DJI Agras.',zh:'无人机不能照搬背负式的稀释倍数。按 DJI Agras 机型算架次、每箱水量和药量。'})}
     </div>${foot()}`; },
-  notes:`<b>45 s. Q3 (cost) and Q7 (drones).</b> Spray day. ChemLog Lab 2: enter tank volume and rates, get per-tank amounts and pack counts, send to workers on WhatsApp, and log every round by farm, zone and worker with stock and cost. DroneDose: pick the DJI model and tank, enter mapped area and rate, and it works out loads, water and product per tank, then copies a mixing sheet for the pilot. Both work offline. Q3, cost: ChemLog's stock and cost log shows where money goes, and the right dose per tank stops over-mixing. Q12 (nozzle count and position, flight settings, spray coverage on slopes) will be answered by our guest who runs a drone rental operation: hand it over to them.` },
+  notes:`<b>45 s. Q3 (cost) and Q7 (drones).</b> Spray day. ChemLog Lab 2: enter tank volume and rates, get per-tank amounts and pack counts, send to workers on WhatsApp, and log every round by farm, zone and worker with stock and cost. DroneDose: pick the DJI model and tank, enter mapped area and rate, and it works out loads, water and product per tank, then copies a mixing sheet for the pilot. Both work offline. Q3, cost: ChemLog's stock and cost log shows where money goes, and the right dose per tank stops over-mixing. Q12 (nozzle count and position, flight settings, spray coverage on slopes) will be answered by our drone specialist: hand it over to them.` },
 
 /* 15 */ { min:0.25, name:'More durian apps',
   html: () => `${qbadge([3,4,9])}${head({en:'Durian · also worth a look',ms:'Durian · juga berguna',zh:'榴莲 · 也值得一看'},
@@ -810,7 +810,7 @@ const SLIDES = [
       [{en:'Pests: leafhopper, stem borer, fruit pests',ms:'Perosak: bena hijau, pengorek batang, perosak buah',zh:'虫害：青蚊、蛀干虫、果实虫害'},[4,6,14],['durianipm','durian-borer','pest-moa']],
       [{en:'Flowering, fruit set & yield',ms:'Pembungaan, buah jadi & hasil',zh:'开花、保果与产量'},[1,2,6,9,17],['agriprotimeline','agripro-nutrients','cn-garden','offseason','duriantreescience']],
       [{en:'Fruit quality & tiger stripe',ms:'Kualiti buah & belang harimau',zh:'果实品质与老虎斑'},[8,9,15],['tigerstripe','nutrienttriage','agripro-nutrients']],
-      [{en:'Drones, spraying & cost',ms:'Dron, semburan & kos',zh:'无人机、喷药与成本'},[3,7],['dronedose','chemlog','pest-moa'],{en:'Q12: answered by our drone rental guest',ms:'Q12: dijawab oleh tetamu kami dari perkhidmatan sewa dron',zh:'Q12：由无人机租赁业者嘉宾解答'}],
+      [{en:'Drones, spraying & cost',ms:'Dron, semburan & kos',zh:'无人机、喷药与成本'},[3,7],['dronedose','chemlog','pest-moa'],{en:'Q12: our drone specialist will answer your question',ms:'Q12: pakar dron kami akan menjawab soalan anda',zh:'Q12：由无人机专家为您解答'}],
       [{en:'Weather & super El Niño',ms:'Cuaca & El Niño super',zh:'天气与超级厄尔尼诺'},[13,18],['enso','rainlog-lab','jerantut']],
     ];
     const pill = id => { const a = D.apps[id]; return `<button type="button" class="app sm" data-app="${id}" style="padding:5px 10px 5px 5px;gap:8px;align-items:center;flex:none"><img src="${a.logo}" alt="" style="width:32px;height:32px;border-radius:8px"><span class="t"><b style="font-size:19px;white-space:nowrap">${esc(a.name.replace(' · AgriMicrobe','').replace(' Remote Sensing','').replace('Durian Trunk Disease Triage','Trunk Disease Triage').replace('而连突农友天气 · WeatherNext','WeatherNext Jerantut').replace(' 老虎斑',''))}</b></span></button>`; };
@@ -822,7 +822,7 @@ const SLIDES = [
         <div class="tiny gold" style="font-weight:800">${qs.map(n=>'Q'+n).join(' · ')}</div>
         <div style="display:flex;flex-wrap:wrap;gap:6px">${ids.map(pill).join('')}</div>${extra ? `<div class="tiny muted" style="font-weight:700">${t(extra)}</div>` : ''}</div>`).join('')}
     </div>${foot()}`; },
-  notes:`<b>Use during the Q&A.</b> Read a question number from the list, find its card, tap the app to show its QR code and screenshots full screen, answer, then Esc. Q12 (drone nozzles, flight settings, spray coverage on slopes): hand over to our drone rental guest. Q18 (关于榴莲, general): point to woobrothers.my.` },
+  notes:`<b>Use during the Q&A.</b> Read a question number from the list, find its card, tap the app to show its QR code and screenshots full screen, answer, then Esc. Q12 (drone nozzles, flight settings, spray coverage on slopes): hand over to our drone specialist. Q18 (关于榴莲, general): point to woobrothers.my.` },
 
 /* 18 */ { min:0.5, name:'Thank you', deep:true,
   html: () => `<div class="col grow" style="justify-content:center;gap:30px">
