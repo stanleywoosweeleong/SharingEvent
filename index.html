@@ -829,15 +829,11 @@ const SLIDES = [
       <h1 style="font-size:88px">${dual({en:'Thank you. Questions?',ms:'Terima kasih. Ada soalan?',zh:'谢谢！有问题吗？'})}</h1>
       <div style="margin-top:-6px">${waButton()}</div>
       <p class="sub">${dual({en:'Help us improve: tell us when a forecast or a diagnosis is wrong at your farm.',ms:'Bantu kami: beritahu bila ramalan atau diagnosis salah di kebun anda.',zh:'帮我们改进：预报或诊断在你的园地不准时，请告诉我们。'})}</p>
-      <div class="row" style="gap:40px;align-items:flex-start">
-        ${qr('woo',200,{en:'All apps',ms:'Semua aplikasi',zh:'全部软件'},D.urls.woo)}
-        ${qr('talk',200,{en:'This talk',ms:'Pembentangan ini',zh:'这份演讲'},'SharingEvent')}
-        <div class="col" style="gap:10px;margin-left:auto">
-          <div class="kick" style="font-size:20px">${t({en:'Scan to save our contact · WhatsApp us',ms:'Imbas untuk simpan kenalan kami · WhatsApp kami',zh:'扫码保存联系人 · WhatsApp 我们'})}</div>
-          <div class="row" style="gap:28px">
-            ${[['vc-stanley','Stanley Woo','+60 19-382 4740'],['vc-bryan','Bryan Woo','+60 11-4001 5077']].map(([k,n,tel])=>`<figure class="qr"><div class="code" style="width:200px;height:200px">${D.qr[k]}</div><figcaption>${n}<code style="font-size:22px;font-weight:700">${tel}</code></figcaption></figure>`).join('')}
-          </div>
-        </div>
+      <div class="row" style="justify-content:space-between;align-items:flex-start">
+        ${qr('woo',220,{en:'All apps',ms:'Semua aplikasi',zh:'全部软件'},D.urls.woo)}
+        ${qr('talk',220,{en:'This talk',ms:'Pembentangan ini',zh:'这份演讲'},'SharingEvent')}
+        ${qr('vc-stanley',220,{en:'Save Stanley’s contact',ms:'Simpan kenalan Stanley',zh:'保存 Stanley 联系人'},'+60 19-382 4740')}
+        ${qr('vc-bryan',220,{en:'Save Bryan’s contact',ms:'Simpan kenalan Bryan',zh:'保存 Bryan 联系人'},'+60 11-4001 5077')}
       </div>
     </div>${foot()}`,
   notes:`<b>Close (≈ 1 min left for Q&A).</b> Thank the organisers and growers. Take questions. Repeat the ask: tell us when a forecast or a diagnosis is wrong; that is how these apps get better for Jerantut. Leave this slide up. The two QR codes on the right are contact cards: scanning one with the phone camera offers "Add to contacts" with the name and number filled in, and the contact then appears in WhatsApp.` },
