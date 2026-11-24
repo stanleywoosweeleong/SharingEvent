@@ -207,4 +207,4 @@ Use during the Q&A. Read a question number from the list, find its card, tap the
 
 ## 40. Thank you
 
-Close (≈ 1 min left for Q&A). Thank the organisers and growers. Take questions. Repeat the ask: tell us when a forecast or a diagnosis is wrong; that is how these apps get better for Jerantut. Leave this slide up so people can scan or copy the WhatsApp numbers.
+Close (≈ 1 min left for Q&A). Thank the organisers and growers. Take questions. Repeat the ask: tell us when a forecast or a diagnosis is wrong; that is how these apps get better for Jerantut. Leave this slide up. The two QR codes on the right are contact cards: scanning one with the phone camera offers "Add to contacts" with the name and number filled in, and the contact then appears in WhatsApp.
