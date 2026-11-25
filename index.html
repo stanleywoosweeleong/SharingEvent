@@ -768,10 +768,10 @@ const SLIDES = [
       return `<div class="col card grow" style="gap:14px;padding:22px 24px">
         <div style="display:flex;gap:18px;align-items:center"><img src="${a.logo}" alt="" style="width:84px;height:84px;border-radius:20px"><div><b style="font-family:var(--display);font-size:36px">${esc(a.name)}</b><div class="small muted">${esc(t(a.tag))}</div></div></div>
         <div class="callout small" style="padding:12px 18px">${t(q)}</div>
-        <div class="row" style="gap:20px;align-items:flex-end"><ul class="small grow" style="margin:0;padding-left:1.1em;display:grid;gap:6px">${feats(id,3).map(f=>`<li>${esc(f)}</li>`).join('')}</ul>${qr(id,190,'','')}</div></div>`; };
+        <div class="row" style="gap:20px;align-items:flex-end;margin-top:auto"><ul class="small grow" style="margin:0;padding-left:1.1em;display:grid;gap:6px">${feats(id,3).map(f=>`<li>${esc(f)}</li>`).join('')}</ul>${qr(id,190,'','')}</div></div>`; };
     return `${qbadge([3,7])}${head({en:'Durian · 9 · spray day',ms:'Durian · 9 · hari sembur',zh:'榴莲 · 9 · 喷药日'},
       {en:'From the label to the tank, without mistakes',ms:'Dari label ke tangki, tanpa silap',zh:'从标签到药桶，不出错'})}
-    <div class="row" style="gap:24px;align-items:flex-start">
+    <div class="row" style="gap:24px;align-items:stretch">
       ${col('chemlog',{en:'Knapsack or tank: how much of each product, how many packs? Send it to workers on WhatsApp.',ms:'Pam galas atau tangki: berapa banyak setiap produk, berapa pek? Hantar kepada pekerja melalui WhatsApp.',zh:'背负式或大桶：每种药放多少、要几包？直接 WhatsApp 发给工人。'})}
       ${col('dronedose',{en:'A drone cannot use a knapsack dilution. Loads, water and product per tank for DJI Agras.',ms:'Dron tidak boleh guna bancuhan pam galas. Bilangan muatan, air dan produk setiap tangki untuk DJI Agras.',zh:'无人机不能照搬背负式的稀释倍数。按 DJI Agras 机型算架次、每箱水量和药量。'})}
     </div>${foot()}`; },
