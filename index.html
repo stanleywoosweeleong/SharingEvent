@@ -905,8 +905,11 @@ const safeProbe = document.createElement('div');
 safeProbe.style.cssText = 'position:fixed;left:0;top:0;width:0;height:0;visibility:hidden;pointer-events:none;padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px)';
 document.body.appendChild(safeProbe);
 /* Screen fit (set in Screen check, saved on this device): zoom, move, and Fill = also use the notch / home-bar area */
-const ADJ_DEF = {z:1, x:0, y:0, fill:false};
-let ADJ = (() => { const a = store.get('adj', null); return (a && typeof a === 'object' && Number.isFinite(a.z) && Number.isFinite(a.x) && Number.isFinite(a.y))
+// Fill is on by default: on a phone turned sideways the slide is limited by the screen height, so the notch sits in the
+// black side bars anyway, and the home bar is only a thin line drawn over the slide. With an HDMI cable the projector
+// shows the whole phone screen, so every pixel of height kept here makes the projected slide bigger.
+const ADJ_DEF = {z:1, x:0, y:0, fill:true};
+let ADJ = (() => { const a = store.get('adj2', null); return (a && typeof a === 'object' && Number.isFinite(a.z) && Number.isFinite(a.x) && Number.isFinite(a.y))
   ? {z:Math.min(1.4,Math.max(0.6,a.z)), x:Math.min(.3,Math.max(-.3,a.x)), y:Math.min(.3,Math.max(-.3,a.y)), fill:!!a.fill} : {...ADJ_DEF}; })();
 function presentGeom(){
   const cs = getComputedStyle(safeProbe), px = v => ADJ.fill ? 0 : (parseFloat(v) || 0);
@@ -1123,7 +1126,7 @@ function openCal(){
       <button type="button" data-fit="l" aria-label="Move left">←</button><button type="button" data-fit="u" aria-label="Move up">↑</button><button type="button" data-fit="d" aria-label="Move down">↓</button><button type="button" data-fit="r" aria-label="Move right">→</button>
       <button type="button" data-fit="fill" class="${ADJ.fill?'on':''}">Fill</button><button type="button" data-fit="reset">Reset</button>
       <span class="val" id="fitVal">${fitText()}</span></div>
-    <p class="tiny muted">Make the four corners sit at the screen edges: + / − size, arrows move, Fill also uses the notch and home-bar area. Saved on this device. Tap outside the buttons or press Esc to close.</p></div>`;
+    <p class="tiny muted">Make the four corners sit at the screen edges: + / − size, arrows move. Fill (on by default) uses the full screen height, best with a projector cable because the projector shows the whole phone screen; turn it off only if a corner hides behind the notch. Saved on this device. Tap outside the buttons or press Esc to close.</p></div>`;
   $('#ovCal').classList.add('on'); fitCal();
 }
 const fitText = () => `${Math.round(ADJ.z*100)}%${ADJ.x||ADJ.y ? ` · moved ${Math.round(ADJ.x*100)}, ${Math.round(ADJ.y*100)}` : ''}${ADJ.fill ? ' · Fill on' : ''}`;
@@ -1133,7 +1136,7 @@ function adjust(a){
   else if(a==='l') ADJ.x = Math.max(-.3, +(ADJ.x-st).toFixed(2)); else if(a==='r') ADJ.x = Math.min(.3, +(ADJ.x+st).toFixed(2));
   else if(a==='u') ADJ.y = Math.max(-.3, +(ADJ.y-st).toFixed(2)); else if(a==='d') ADJ.y = Math.min(.3, +(ADJ.y+st).toFixed(2));
   else if(a==='fill') ADJ.fill = !ADJ.fill; else if(a==='reset') ADJ = {...ADJ_DEF};
-  store.set('adj', ADJ);
+  store.set('adj2', ADJ);
   const v = $('#fitVal'); if(v) v.textContent = fitText();
   const f = document.querySelector('[data-fit="fill"]'); if(f) f.classList.toggle('on', ADJ.fill);
   layout();
