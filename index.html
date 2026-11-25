@@ -243,6 +243,11 @@ h1{font-size:calc(84px*var(--k));line-height:1.02;font-weight:800}
 .cal .corner{position:absolute;width:70px;height:70px;border:6px solid var(--ink)}
 .cal .tl{left:14px;top:14px;border-right:0;border-bottom:0}.cal .tr{right:14px;top:14px;border-left:0;border-bottom:0}
 .cal .bl{left:14px;bottom:14px;border-right:0;border-top:0}.cal .br{right:14px;bottom:14px;border-left:0;border-top:0}
+.proj #ovCal{padding:0;background:#000;overflow:hidden}
+.fitbar{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;align-items:center}
+.fitbar button{font:800 28px/1 inherit;font-family:inherit;min-width:84px;height:72px;padding:0 20px;border-radius:12px;border:3px solid var(--deep);background:var(--slide);color:var(--ink);cursor:pointer}
+.fitbar button.on{background:var(--deep);color:var(--on-deep)}
+.fitbar .val{font-size:24px;font-weight:700;min-width:300px}
 
 /* ---------- presenter view ---------- */
 .pv{display:none}
@@ -358,7 +363,7 @@ h1{font-size:calc(84px*var(--k));line-height:1.02;font-weight:800}
     <dt>B or .</dt><dd>Black screen (press again to return)</dd>
     <dt>W</dt><dd>White screen</dd>
     <dt>L</dt><dd>Laser pointer</dd>
-    <dt>C</dt><dd>Check the screen: corners, colours and text sizes</dd>
+    <dt>C</dt><dd>Screen check and fit: corners, colours, text sizes; then + / − size, arrows move, F fill, R reset (saved on this device)</dd>
     <dt>G</dt><dd>All slides</dd>
     <dt>N</dt><dd>Speaker notes under the slide (rehearsal)</dd>
     <dt>T</dt><dd>Switch bright room / dark room</dd>
@@ -367,7 +372,7 @@ h1{font-size:calc(84px*var(--k));line-height:1.02;font-weight:800}
   <h3>Option A · Windows laptop</h3>
   <p>Connect the projector, press <b>Win + P</b> and choose <b>Extend</b>. Open the talk in Chrome or Edge, drag this window to the projector screen and press <b>P</b> for Projector Mode. Press <b>S</b> for the presenter window and keep it on the laptop screen: current and next slide, notes and the 20-minute pace timer. Use the arrow keys, a mouse click or a wireless clicker. If you choose <b>Duplicate</b> instead, the audience sees everything on the laptop, so leave the presenter window closed.</p>
   <h3>Option B · Phone only</h3>
-  <p>Install the talk on your phone (open stanleywoosweeleong.github.io/SharingEvent, then Add to Home Screen), tap <b>Save offline</b> (saves every screenshot in all three languages), connect the phone to the projector with an HDMI adapter or screen mirroring, turn it sideways and tap <b>▶ Present</b>. Tap the right side for the next slide, the left side to go back, or swipe. Tap the top edge for the control bar: exit, skip screenshots, language, second line, text size (A− / A+), ● Laser (stays on from slide to slide: any drag places the dot, no hold needed; a quick tap still changes slides), all slides, bright/dark slides, black screen and your time. Before presenting, <b>⋯ More</b> in the toolbar has text size, second line, room, notes for rehearsal, all slides, screen check and help. To point at something, <b>press and hold</b> the slide: a red dot follows your finger and <b>stays where you lift</b>. Tap the dot to remove it; changing slides clears it. Android phones give a short buzz when you are more than 30 seconds behind plan. The audience sees everything on the phone screen, so keep your notes on the printed cue card.</p>
+  <p>Install the talk on your phone (open stanleywoosweeleong.github.io/SharingEvent, then Add to Home Screen), tap <b>Save offline</b> (saves every screenshot in all three languages), connect the phone to the projector with an HDMI adapter or screen mirroring, turn it sideways and tap <b>▶ Present</b>. Tap the right side for the next slide, the left side to go back, or swipe. Tap the top edge for the control bar: exit, skip screenshots, language, second line, text size (A− / A+), ● Laser (stays on from slide to slide: any drag places the dot, no hold needed; a quick tap still changes slides), all slides, bright/dark slides, black screen, ⛶ Fit (make the slide fill the screen: + / − size, arrows move, Fill uses the notch area; saved on this phone) and your time. Before presenting, <b>⋯ More</b> in the toolbar has text size, second line, room, notes for rehearsal, all slides, screen check and help. To point at something, <b>press and hold</b> the slide: a red dot follows your finger and <b>stays where you lift</b>. Tap the dot to remove it; changing slides clears it. Android phones give a short buzz when you are more than 30 seconds behind plan. The audience sees everything on the phone screen, so keep your notes on the printed cue card.</p>
   <h3>Projector tips</h3>
   <p>Use <b>Bright room</b> when the lights stay on: dark text on a light slide survives a washed-out projector. Use <b>Dark room</b> in a dim hall. If the edges are cut off, choose <b>C</b> to check the corners, then set Text to Smaller. The live rain chart needs internet; without it, the slide shows the saved run from 11 Nov 2026 and says so.</p>
 </div></div>
@@ -393,6 +398,7 @@ h1{font-size:calc(84px*var(--k));line-height:1.02;font-weight:800}
   <button type="button" data-p="grid">All</button>
   <button type="button" data-p="room" aria-label="Switch bright or dark slides">☀ / ☾</button>
   <button type="button" data-p="black">■ Black</button>
+  <button type="button" data-p="fit" aria-label="Screen check and fit">⛶ Fit</button>
 </div>
 <div class="turn" id="turn">↻<br>Turn your phone sideways to present</div>
 
@@ -898,21 +904,28 @@ function render(anim=true){
 const safeProbe = document.createElement('div');
 safeProbe.style.cssText = 'position:fixed;left:0;top:0;width:0;height:0;visibility:hidden;pointer-events:none;padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px)';
 document.body.appendChild(safeProbe);
-function fitPresent(){
-  const cs = getComputedStyle(safeProbe), px = v => parseFloat(v) || 0;
-  const t = px(cs.paddingTop), r = px(cs.paddingRight), b = px(cs.paddingBottom), l = px(cs.paddingLeft);
-  const vv = window.visualViewport, vr = vp.getBoundingClientRect();
+/* Screen fit (set in Screen check, saved on this device): zoom, move, and Fill = also use the notch / home-bar area */
+const ADJ_DEF = {z:1, x:0, y:0, fill:false};
+let ADJ = (() => { const a = store.get('adj', null); return (a && typeof a === 'object' && Number.isFinite(a.z) && Number.isFinite(a.x) && Number.isFinite(a.y))
+  ? {z:Math.min(1.4,Math.max(0.6,a.z)), x:Math.min(.3,Math.max(-.3,a.x)), y:Math.min(.3,Math.max(-.3,a.y)), fill:!!a.fill} : {...ADJ_DEF}; })();
+function presentGeom(){
+  const cs = getComputedStyle(safeProbe), px = v => ADJ.fill ? 0 : (parseFloat(v) || 0);
+  const t = px(cs.paddingTop), r = px(cs.paddingRight), b = px(cs.paddingBottom), l = px(cs.paddingLeft), m = ADJ.fill ? 0 : 4;   // 4 px breathing room
+  const vv = window.visualViewport;
   const vw = vv ? vv.width : innerWidth, vh = vv ? vv.height : innerHeight;
   const ox = vv ? vv.offsetLeft : 0, oy = vv ? vv.offsetTop : 0;
-  const W = Math.max(1, vw - l - r - 8), H = Math.max(1, vh - t - b - 8);          // 4 px breathing room on each side
-  const sc = Math.min(W/1600, H/900);
-  const x = ox + l + 4 + (W - 1600*sc)/2 - vr.left, y = oy + t + 4 + (H - 900*sc)/2 - vr.top;
-  frame.style.left = '0px'; frame.style.top = '0px';
-  frame.style.transform = `translate(${x}px,${y}px) scale(${sc})`;
+  const W = Math.max(1, vw - l - r - 2*m), H = Math.max(1, vh - t - b - 2*m);
+  const sc = Math.min(W/1600, H/900) * ADJ.z;
+  return { sc, x: ox + l + m + (W - 1600*sc)/2 + ADJ.x*vw, y: oy + t + m + (H - 900*sc)/2 + ADJ.y*vh };
 }
+function place(fr, box){ const g = presentGeom(), r = box.getBoundingClientRect();
+  fr.style.left = '0px'; fr.style.top = '0px'; fr.style.transform = `translate(${g.x - r.left}px,${g.y - r.top}px) scale(${g.sc})`; }
+function fitPresent(){ place(frame, vp); }
+function fitCal(){ const ov = $('#ovCal'), fr = $('#calFrame'); if(!ov.classList.contains('on')) return;
+  if(root.classList.contains('proj')) place(fr, ov); else { fr.style.left = ''; fr.style.top = ''; fitOverlay(ov, fr); } }
 function layout(){
   if(isPresenter){ fit($('#pvFrame'), $('#pvStage')); fitCorner($('#pvNextFrame'), $('#pvNextBox')); return; }
-  if(root.classList.contains('proj')){ fitPresent(); return; }
+  if(root.classList.contains('proj')){ fitPresent(); fitCal(); return; }
   frame.style.left = ''; frame.style.top = '';
   fit(frame, vp, 0.97);
 }
@@ -1035,13 +1048,14 @@ async function saveOffline(){
 let wake = null, idleT = null;
 async function keepAwake(){ try{ if('wakeLock' in navigator && document.visibilityState==='visible') wake = await navigator.wakeLock.request('screen'); }catch(e){ wake = null; } }
 const viewportMeta = document.querySelector('meta[name="viewport"]'), viewportNormal = viewportMeta ? viewportMeta.content : '';
-function enterProj(){
+function enterProj(quiet){
   // Undo any accidental pinch or double-tap zoom so the slide is shown at its real size
   if(viewportMeta) viewportMeta.content = 'width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover';
   root.classList.add('proj');
   const el = document.documentElement;
   if(el.requestFullscreen && !document.fullscreenElement) el.requestFullscreen().then(() => { try{ screen.orientation && screen.orientation.lock && screen.orientation.lock('landscape').catch(()=>{}); }catch(e){} }).catch(()=>{});
   keepAwake(); layout(); checkPortrait();
+  if(quiet === true) return;   // opened for Screen check: no timer, stay on this slide
   // Start from slide 1 (like "From Beginning") on the first Present of this visit, or when sitting on the last slide.
   // The talk remembers the last slide viewed, so without this it could open on 37/37 after a rehearsal.
   if((!T.start && !T.acc) || S.i === SLIDES.length-1){ T.acc = 0; T.start = Date.now(); buzzedFor = -1; if(S.i !== 0) go(0); }
@@ -1096,6 +1110,7 @@ function openApp(id){
   $('#ovApp').classList.add('on'); fitOverlay($('#ovApp'), fr);
 }
 function openCal(){
+  if(!isPresenter && !root.classList.contains('proj')) enterProj(true);
   const fr = $('#calFrame');
   fr.innerHTML = `<div class="slide cal" style="justify-content:center;align-items:center;text-align:center"><button type="button" class="close" data-act="close" aria-label="Close" style="right:120px;top:30px;z-index:3">×</button>
     <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
@@ -1103,8 +1118,25 @@ function openCal(){
     <p class="sub">All four corner marks should be visible. From the back row, read the smallest line you can.</p>
     <div class="col" style="gap:8px;align-items:center"><div style="font-size:48px">48 · Headline text 标题 Tajuk</div><div style="font-size:32px">32 · Card text 卡片文字 Teks kad</div><div style="font-size:24px">24 · Small text 小字 Teks kecil</div><div style="font-size:18px">18 · Footer 页脚 Nota kaki</div></div>
     <div class="legend">${MODELS.map(m=>`<span class="chip"><i style="background:var(${m.c})"></i>${m.name}</span>`).join('')}<span class="chip" style="background:var(--hi)">Highlight</span><span class="chip" style="background:var(--gold-fill);color:var(--accent-ink)">Accent</span><span class="chip" style="background:var(--deep);color:var(--on-deep)">Deep green</span></div>
-    <p class="tiny muted">Press any key or tap anywhere to close. If the corners are cut off, set Text to Smaller or adjust the projector zoom.</p></div>`;
-  $('#ovCal').classList.add('on'); fitOverlay($('#ovCal'), fr);
+    <div class="fitbar"><b style="font-size:26px">Screen fit:</b>
+      <button type="button" data-fit="zm" aria-label="Smaller">−</button><button type="button" data-fit="zp" aria-label="Bigger">+</button>
+      <button type="button" data-fit="l" aria-label="Move left">←</button><button type="button" data-fit="u" aria-label="Move up">↑</button><button type="button" data-fit="d" aria-label="Move down">↓</button><button type="button" data-fit="r" aria-label="Move right">→</button>
+      <button type="button" data-fit="fill" class="${ADJ.fill?'on':''}">Fill</button><button type="button" data-fit="reset">Reset</button>
+      <span class="val" id="fitVal">${fitText()}</span></div>
+    <p class="tiny muted">Make the four corners sit at the screen edges: + / − size, arrows move, Fill also uses the notch and home-bar area. Saved on this device. Tap outside the buttons or press Esc to close.</p></div>`;
+  $('#ovCal').classList.add('on'); fitCal();
+}
+const fitText = () => `${Math.round(ADJ.z*100)}%${ADJ.x||ADJ.y ? ` · moved ${Math.round(ADJ.x*100)}, ${Math.round(ADJ.y*100)}` : ''}${ADJ.fill ? ' · Fill on' : ''}`;
+function adjust(a){
+  const st = 0.01;
+  if(a==='zp') ADJ.z = Math.min(1.4, +(ADJ.z+0.02).toFixed(2)); else if(a==='zm') ADJ.z = Math.max(0.6, +(ADJ.z-0.02).toFixed(2));
+  else if(a==='l') ADJ.x = Math.max(-.3, +(ADJ.x-st).toFixed(2)); else if(a==='r') ADJ.x = Math.min(.3, +(ADJ.x+st).toFixed(2));
+  else if(a==='u') ADJ.y = Math.max(-.3, +(ADJ.y-st).toFixed(2)); else if(a==='d') ADJ.y = Math.min(.3, +(ADJ.y+st).toFixed(2));
+  else if(a==='fill') ADJ.fill = !ADJ.fill; else if(a==='reset') ADJ = {...ADJ_DEF};
+  store.set('adj', ADJ);
+  const v = $('#fitVal'); if(v) v.textContent = fitText();
+  const f = document.querySelector('[data-fit="fill"]'); if(f) f.classList.toggle('on', ADJ.fill);
+  layout();
 }
 
 /* ---------- input ---------- */
@@ -1123,7 +1155,10 @@ document.addEventListener('keydown', e => {
   // While Screen check, Help, All slides or an app pop-up is open, any key just closes it and never changes the slide.
   // (A slide number + Enter still jumps from the grid.)
   if(anyOverlay() && !e.ctrlKey && !e.metaKey && !e.altKey){
-    e.preventDefault(); closeOverlays(); return;
+    e.preventDefault();
+    const FK = {ArrowLeft:'l',ArrowRight:'r',ArrowUp:'u',ArrowDown:'d','+':'zp','=':'zp','-':'zm','_':'zm',f:'fill',F:'fill',r:'reset',R:'reset'};
+    if(anyOverlay().id === 'ovCal' && FK[e.key]){ adjust(FK[e.key]); return; }
+    closeOverlays(); return;
   }
   // A focused button, link or menu keeps its normal Enter / Space action (e.g. Enter on 'All slides' opens the grid)
   if((e.key === 'Enter' || e.key === ' ') && e.target.closest && e.target.closest('button,a[href],[role=button],summary')) return;
@@ -1155,11 +1190,12 @@ document.addEventListener('click', e => {
   const g = e.target.closest('[data-go]'); if(g){ closeOverlays(); go(+g.dataset.go); return; }
   const act = e.target.closest('[data-act]');
   if(act){ if(act.dataset.act==='wx') loadWeather(); if(act.dataset.act==='close') closeOverlays(); return; }
+  const fb = e.target.closest('[data-fit]'); if(fb){ if(e.detail) fb.blur(); adjust(fb.dataset.fit); return; }
   const ov = e.target.closest('.overlay'); if(ov && (ov.id === 'ovCal' || ov.id === 'ovHelp' || e.target === ov || e.target.classList.contains('frame') || e.target.classList.contains('grid'))){ closeOverlays(); return; }
   const tb = e.target.closest('.bar button, .nav button'); if(tb && e.detail) tb.blur();   // a tapped toolbar button must not catch later Space/Enter
   const pb = e.target.closest('[data-p]');
   if(pb && e.detail) pb.blur();   // mouse/touch press: drop focus so a clicker's Enter/Space goes to the slides
-  if(pb){ const a = pb.dataset.p; if(a==='exit') exitProj(); else if(a==='prev') prev(); else if(a==='next') next(); else if(a==='skip') nextMain(); else if(a==='grid'){ openGrid(); $('#pbar').classList.remove('on'); } else if(a==='black'){ blank('black'); $('#pbar').classList.remove('on'); } else if(a==='kminus' || a==='kplus'){ stepK(a==='kplus' ? 1 : -1); } else if(a==='laser'){ toggleLaser(); if(TOUCH) toast(root.classList.contains('lasering') ? 'Laser on: drag to place the dot · it stays when you lift · tap the dot to remove it' : 'Laser off · press and hold a slide to point any time'); } else if(a==='room'){ const dark = root.dataset.room ? root.dataset.room==='dark' : matchMedia('(prefers-color-scheme: dark)').matches; setRoom(dark ? 'day' : 'dark'); } if($('#pbar').classList.contains('on')) showPbar(); return; }
+  if(pb){ const a = pb.dataset.p; if(a==='exit') exitProj(); else if(a==='prev') prev(); else if(a==='next') next(); else if(a==='skip') nextMain(); else if(a==='grid'){ openGrid(); $('#pbar').classList.remove('on'); } else if(a==='fit'){ $('#pbar').classList.remove('on'); openCal(); } else if(a==='black'){ blank('black'); $('#pbar').classList.remove('on'); } else if(a==='kminus' || a==='kplus'){ stepK(a==='kplus' ? 1 : -1); } else if(a==='laser'){ toggleLaser(); if(TOUCH) toast(root.classList.contains('lasering') ? 'Laser on: drag to place the dot · it stays when you lift · tap the dot to remove it' : 'Laser off · press and hold a slide to point any time'); } else if(a==='room'){ const dark = root.dataset.room ? root.dataset.room==='dark' : matchMedia('(prefers-color-scheme: dark)').matches; setRoom(dark ? 'day' : 'dark'); } if($('#pbar').classList.contains('on')) showPbar(); return; }
   // A finger tap on the slide is handled by the pointer code below; ignore the click the browser sends after it
   if(e.target.closest('#vp') && Date.now() < touchTapUntil) return;
   if(root.classList.contains('proj') && e.target.closest('#vp') && !e.target.closest('button,a,select')){
@@ -1259,7 +1295,7 @@ $('#bCheck').onclick = openCal;
 $('#bMore').onclick = () => { const o = $('#bar').classList.toggle('open'); $('#bMore').setAttribute('aria-expanded', o); $('#bMore').textContent = o ? '✕ Less' : '⋯ More'; layout(); };
 
 new ResizeObserver(layout).observe(isPresenter ? $('#pvStage') : vp);
-window.addEventListener('resize', () => { layout(); const o = anyOverlay(); if(o && o.id==='ovApp') fitOverlay(o, $('#appFrame')); if(o && o.id==='ovCal') fitOverlay(o, $('#calFrame')); });
+window.addEventListener('resize', () => { layout(); const o = anyOverlay(); if(o && o.id==='ovApp') fitOverlay(o, $('#appFrame')); if(o && o.id==='ovCal') fitCal(); });
 
 /* ---------- boot ---------- */
 $('#brandImg').src = D.brand.emblem;
