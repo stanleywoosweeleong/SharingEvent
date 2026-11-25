@@ -348,7 +348,7 @@ h1{font-size:calc(84px*var(--k));line-height:1.02;font-weight:800}
     <dt>← PgUp</dt><dd>Previous slide</dd>
     <dt>Shift + →</dt><dd>Skip the screenshot slides and go to the next topic (Shift + ← goes back)</dd>
     <dt>Home / End</dt><dd>First or last slide</dd>
-    <dt>7 Enter</dt><dd>Type a number, then Enter, to jump to that slide</dd>
+    <dt>39 Enter</dt><dd>Type a slide number, then Enter, to jump to it (Backspace fixes a typo; the number waits 4 seconds)</dd>
     <dt>P</dt><dd>Projector Mode: full screen, no menus, stronger contrast, screen stays awake, click to advance</dd>
     <dt>S</dt><dd>Presenter view: current and next slide, notes, 20-minute pace timer. Close it with ✕ Close or Esc</dd>
     <dt>B or .</dt><dd>Black screen (press again to return)</dd>
@@ -1080,11 +1080,18 @@ function openCal(){
 let numBuf = '', numT = null;
 document.addEventListener('keydown', e => {
   if(e.target.closest && e.target.closest('select,input,textarea')) return;
+  // Jump to a slide: type its number, then Enter. Handled first, so a focused button or open pop-up can't take the Enter.
+  if(!e.ctrlKey && !e.metaKey && !e.altKey){
+    if(/^[0-9]$/.test(e.key)){ e.preventDefault(); numBuf = (numBuf + e.key).slice(-3); clearTimeout(numT); numT = setTimeout(()=>{ numBuf=''; }, 4000); toast(`Go to slide ${numBuf} · press Enter`); return; }
+    if((e.key === 'Enter' || e.key === 'NumpadEnter') && numBuf){ e.preventDefault(); e.stopPropagation(); const n = parseInt(numBuf,10); numBuf=''; clearTimeout(numT);
+      if(n >= 1 && n <= SLIDES.length){ closeOverlays(); go(n-1); toast(`Slide ${n}`); } else toast(`No slide ${n} (1–${SLIDES.length})`); return; }
+    if(e.key === 'Backspace' && numBuf){ e.preventDefault(); numBuf = numBuf.slice(0,-1); toast(numBuf ? `Go to slide ${numBuf} · press Enter` : 'Cancelled'); return; }
+  }
   // Esc from some phone Bluetooth keyboards arrives as 'Esc' or only as key code 27
   const isEsc = e.key === 'Escape' || e.key === 'Esc' || e.keyCode === 27;
   // While Screen check, Help, All slides or an app pop-up is open, any key just closes it and never changes the slide.
   // (A slide number + Enter still jumps from the grid.)
-  if(anyOverlay() && !e.ctrlKey && !e.metaKey && !e.altKey && !/^[0-9]$/.test(e.key) && !(e.key === 'Enter' && numBuf)){
+  if(anyOverlay() && !e.ctrlKey && !e.metaKey && !e.altKey){
     e.preventDefault(); closeOverlays(); return;
   }
   // A focused button, link or menu keeps its normal Enter / Space action (e.g. Enter on 'All slides' opens the grid)
@@ -1094,8 +1101,6 @@ document.addEventListener('keydown', e => {
   if(b.className !== 'blank'){ b.className = 'blank'; e.preventDefault(); return; }
   if(isEsc && isPresenter && !anyOverlay()){ closePresenter(); return; }
   if(isEsc){ if(anyOverlay()) closeOverlays(); else if(root.classList.contains('lasering')) toggleLaser(); else if(root.classList.contains('proj')) exitProj(); return; }
-  if(/^[0-9]$/.test(k)){ numBuf += k; clearTimeout(numT); numT = setTimeout(()=>numBuf='', 1500); toast('Go to slide ' + numBuf + ' · press Enter'); return; }
-  if(k === 'Enter' && numBuf){ closeOverlays(); go(parseInt(numBuf,10)-1); numBuf=''; e.preventDefault(); return; }
   if(e.shiftKey && (k==='ArrowRight' || k==='ArrowLeft')){ e.preventDefault(); k==='ArrowRight' ? nextMain() : prevMain(); return; }
   switch(k){
     case 'ArrowRight': case 'ArrowDown': case 'PageDown': case ' ': case 'Enter': e.preventDefault(); next(); break;
