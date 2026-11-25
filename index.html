@@ -85,6 +85,9 @@ em{font-style:normal;color:var(--accent)}
 .btn svg{width:16px;height:16px}
 
 .viewport{flex:1;position:relative;min-height:0;overflow:hidden;touch-action:pan-y pinch-zoom}   /* sideways swipes go to the talk */
+.nw{white-space:nowrap}
+/* Chinese title: two fixed lines that shrink only if the larger text sizes would not fit (10 characters + a little) */
+.fitzh{font-size:min(1em,9.5cqi)}
 .frame{position:absolute;left:50%;top:50%;width:1600px;height:900px;transform-origin:0 0}
 .nav{display:flex;align-items:center;gap:12px;background:var(--bar);color:var(--on-deep);border-top:1px solid var(--deep-line);
   padding-block:8px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));font-size:13px}
@@ -576,9 +579,9 @@ const SLIDES = [
 /* 1 */ { min:0.5, name:'Title', deep:true,
   html: () => `
   <div class="row grow" style="align-items:center;gap:60px">
-    <div class="col grow" style="gap:30px">
+    <div class="col grow" style="gap:30px;container-type:inline-size;min-width:0">
       <div class="kick">${t({en:'Sharing session · Jerantut, Pahang',ms:'Sesi perkongsian · Jerantut, Pahang',zh:'分享会 · 彭亨州而连突 Jerantut'})}</div>
-      <h1>${dual({en:'Weather & durian: <em>free</em> farm apps for Agriculture',ms:'Cuaca & durian: aplikasi <em>percuma</em> untuk Pertanian',zh:'天气与榴莲：为农业而做的<em>免费</em>软件'})}</h1>
+      <h1>${dual({en:'Weather & durian: <em>free</em> farm apps for Agriculture',ms:'Cuaca & durian: aplikasi <em>percuma</em> untuk Pertanian',zh:'<span class="fitzh"><span class="nw">天气与榴莲：</span><br><span class="nw">为农业而做的<em>免费</em>软件</span></span>'})}</h1>
       <div style="display:flex;align-items:center;gap:20px">
         <img src="${D.brand.emblem}" alt="" style="width:84px;height:84px;border-radius:18px">
         <div><div style="font-family:var(--display);font-weight:700;font-size:36px">Stanley Woo · Bryan Woo</div>
