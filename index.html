@@ -447,10 +447,12 @@ const MODELS = [
 const SNAPSHOT = {time:["2026-11-29","2026-11-30","2026-12-01","2026-12-02","2026-12-03","2026-12-04","2026-12-05"],
   ecmwf_ifs025:[11.6,8.3,5.2,3.8,1.8,2.6,6.4], gfs_seamless:[17.9,46.8,5.5,1.5,3.0,2.7,19.8],
   icon_seamless:[18.2,6.3,0.9,1.2,2.1,4.2,null], jma_seamless:[17.5,11.3,12.7,2.1,7.9,5.9,4.0]};
-const WX = { state:'loading', data:SNAPSHOT, at:null };
+const WX = { state:'loading', data:SNAPSHOT, at:null, busy:false, tried:0 };
 const WX_URL = 'https://api.open-meteo.com/v1/forecast?latitude=3.936&longitude=102.362&daily=precipitation_sum&models='
   + MODELS.map(m=>m.k).join(',') + '&timezone=Asia%2FKuala_Lumpur&forecast_days=7';
 async function loadWeather(){
+  if(WX.busy) return; WX.busy = true; WX.tried = Date.now();
+  const had = WX.state === 'live' ? {data:WX.data, at:WX.at} : null;
   WX.state = 'loading'; refreshLive();
   try{
     const ctl = new AbortController(); const to = setTimeout(()=>ctl.abort(), 8000);
@@ -462,9 +464,24 @@ async function loadWeather(){
     for(const m of MODELS){ const v = j.daily['precipitation_sum_'+m.k]; d[m.k] = d.time.map((_,i) => (Array.isArray(v) && Number.isFinite(v[i])) ? v[i] : null); }
     if(!MODELS.some(m => d[m.k].some(v => v !== null))) throw new Error('all missing');
     WX.data = d; WX.state = 'live'; WX.at = new Date();
-  }catch(e){ WX.data = SNAPSHOT; WX.state = 'saved'; WX.at = null; }
-  refreshLive();
+  }catch(e){
+    // Keep an earlier live forecast if there is one (its label then shows when it was fetched); else the saved run
+    if(had){ WX.data = had.data; WX.at = had.at; WX.state = 'live'; } else { WX.data = SNAPSHOT; WX.state = 'saved'; WX.at = null; }
+  }
+  WX.busy = false; refreshLive();
 }
+/* An installed app can stay open in the background for days. Fetch again when the forecast is over an hour old
+   or from an earlier day, each time the app comes back to the screen or a live slide opens (a failed try waits 2 min). */
+const klDay = d => d.toLocaleDateString('en-CA', {timeZone:'Asia/Kuala_Lumpur'});
+function wxStale(){
+  if(WX.busy) return false;
+  if(!WX.at) return Date.now() - WX.tried > 2*60e3;
+  return (Date.now() - WX.at > 60*60e3 || klDay(WX.at) !== klDay(new Date())) && Date.now() - WX.tried > 2*60e3;
+}
+function wxCheck(){ if(SLIDES[S.i] && SLIDES[S.i].live && wxStale()) loadWeather(); }
+document.addEventListener('visibilitychange', () => { if(document.visibilityState === 'visible') wxCheck(); });
+window.addEventListener('pageshow', wxCheck);
+setInterval(() => { if(document.visibilityState === 'visible') wxCheck(); }, 5*60e3);
 const WD = {en:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'], ms:['Ahd','Isn','Sel','Rab','Kha','Jum','Sab'], zh:['周日','周一','周二','周三','周四','周五','周六']};
 const dayLabel = (iso, L=S.lang) => { const [y,m,d] = iso.split('-').map(Number); const wd = new Date(y,m-1,d).getDay(); return [WD[L][wd], `${d}/${m}`]; };
 
@@ -531,7 +548,11 @@ function rainChart(){
 function wxStatus(){
   if(WX.state==='loading') return `<span class="status"><i></i>${t({en:'Loading live forecast…',ms:'Memuatkan ramalan langsung…',zh:'正在读取实时预报…'})}</span>`;
   if(WX.state==='live'){
-    const hm = WX.at.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',timeZone:'Asia/Kuala_Lumpur'});
+    let hm = WX.at.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',timeZone:'Asia/Kuala_Lumpur'});
+    // Not fetched today: say the date too, so an old forecast never looks current
+    if(klDay(WX.at) !== klDay(new Date())){ const [, mo, dd] = klDay(WX.at).split('-').map(Number);
+      const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'], MS = ['Jan','Feb','Mac','Apr','Mei','Jun','Jul','Ogo','Sep','Okt','Nov','Dis'];
+      hm = t({en:`${dd} ${MON[mo-1]}, ${hm}`, ms:`${dd} ${MS[mo-1]}, ${hm}`, zh:`${mo} 月 ${dd} 日 ${hm}`}); }
     return `<span class="status live"><i></i>${t({en:`Live from Open-Meteo · fetched ${hm} (Malaysia time)`,ms:`Langsung dari Open-Meteo · diambil ${hm} (waktu Malaysia)`,zh:`Open-Meteo 实时数据 · ${hm} 更新（马来西亚时间）`})}</span>`;
   }
   return `<span class="status"><i></i>${t({en:'No internet: showing the forecast saved on 28 Nov 2026',ms:'Tiada internet: ramalan disimpan pada 28 Nov 2026',zh:'无网络：显示 2026 年 11 月 28 日保存的预报'})}</span>`;
@@ -963,6 +984,7 @@ function go(i, from){
   if(changed && from !== 'remote' && $('#resume')) $('#resume').hidden = true;
   render(changed);
   if(from !== 'remote') send({t:'go', i});
+  wxCheck();
 }
 const next = () => go(S.i+1), prev = () => go(S.i-1);
 /* Jump over the optional screenshot slides */
