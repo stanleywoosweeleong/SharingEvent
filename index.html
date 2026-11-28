@@ -444,9 +444,9 @@ const MODELS = [
   {k:'icon_seamless', name:'ICON', from:{en:'Germany',ms:'Jerman',zh:'德国'}, c:'--m3'},
   {k:'jma_seamless', name:'JMA', from:{en:'Japan',ms:'Jepun',zh:'日本'}, c:'--m4'},
 ];
-const SNAPSHOT = {time:["2026-11-11","2026-11-12","2026-11-13","2026-11-14","2026-11-15","2026-11-16","2026-11-17"],
-  ecmwf_ifs025:[8.8,8.7,12.1,7.4,8.3,6.6,6.7], gfs_seamless:[9.1,12.8,2.8,14.9,6.0,7.5,13.5],
-  icon_seamless:[0.0,5.1,10.1,10.0,9.6,8.1,5.4], jma_seamless:[28.9,12.3,7.0,3.1,4.7,8.9,12.8]};
+const SNAPSHOT = {time:["2026-11-29","2026-11-30","2026-12-01","2026-12-02","2026-12-03","2026-12-04","2026-12-05"],
+  ecmwf_ifs025:[11.6,8.3,5.2,3.8,1.8,2.6,6.4], gfs_seamless:[17.9,46.8,5.5,1.5,3.0,2.7,19.8],
+  icon_seamless:[18.2,6.3,0.9,1.2,2.1,4.2,null], jma_seamless:[17.5,11.3,12.7,2.1,7.9,5.9,4.0]};
 const WX = { state:'loading', data:SNAPSHOT, at:null };
 const WX_URL = 'https://api.open-meteo.com/v1/forecast?latitude=3.936&longitude=102.362&daily=precipitation_sum&models='
   + MODELS.map(m=>m.k).join(',') + '&timezone=Asia%2FKuala_Lumpur&forecast_days=7';
@@ -499,7 +499,7 @@ function rainChart(){
   }
   const vs = MODELS.map(m=>({m, v:d[m.k][best]})).filter(o => has(o.v));
   if(bestSpread < 0 || vs.length < 2){
-    const svg = `<svg class="chart" viewBox="0 0 ${W0} ${H0}" width="${W0}" height="${H0}" role="img" aria-label="Rain forecast by model"><text class="ax" x="${padL-12}" y="${padT-20}" text-anchor="end" font-size="21">mm</text>${g}<text class="ax" x="${W0-padR}" y="${padT-20}" text-anchor="end" font-size="21">– = ${esc(t(NOFC))}</text></svg>`;
+    const svg = `<svg class="chart" viewBox="0 0 ${W0} ${H0}" width="${W0}" height="${H0}" role="img" aria-label="Rain forecast by model"><text class="ax" x="${padL-12}" y="${padT-20}" text-anchor="end" font-size="21">mm</text>${g}<text class="ax" x="${W0-padR}" y="${padT-11}" text-anchor="end" font-size="21">– = ${esc(t(NOFC))}</text></svg>`;
     return {svg, spread:{en:'Not enough models have a forecast right now to compare. Press Refresh in a minute.',ms:'Belum cukup model ada ramalan untuk dibandingkan. Tekan Muat semula sebentar lagi.',zh:'目前有预报的模型不够，无法比较。过一会儿按「刷新」。'}};
   }
   const lo = vs.reduce((a,b)=>b.v<a.v?b:a), hi = vs.reduce((a,b)=>b.v>a.v?b:a);
@@ -511,7 +511,7 @@ function rainChart(){
     zh:`${dn} ${dd}：${lo.m.name} 说 <b>${fmt(lo.v)} 毫米</b>，${hi.m.name} 说 <b>${fmt(hi.v)} 毫米</b>。同一个地方，同一天。`,
   };
   const svg = `<svg class="chart" viewBox="0 0 ${W0} ${H0}" width="${W0}" height="${H0}" role="img" aria-label="Rain forecast by model">
-    <text class="ax" x="${padL-12}" y="${padT-20}" text-anchor="end" font-size="21">mm</text>${g}${gaps?`<text class="ax" x="${W0-padR}" y="${padT-20}" text-anchor="end" font-size="21">– = ${esc(t(NOFC))}</text>`:''}</svg>`;
+    <text class="ax" x="${padL-12}" y="${padT-20}" text-anchor="end" font-size="21">mm</text>${g}${gaps?`<text class="ax" x="${W0-padR}" y="${padT-11}" text-anchor="end" font-size="21">– = ${esc(t(NOFC))}</text>`:''}</svg>`;
   return {svg, spread};
 }
 function wxStatus(){
@@ -520,7 +520,7 @@ function wxStatus(){
     const hm = WX.at.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',timeZone:'Asia/Kuala_Lumpur'});
     return `<span class="status live"><i></i>${t({en:`Live from Open-Meteo · fetched ${hm} (Malaysia time)`,ms:`Langsung dari Open-Meteo · diambil ${hm} (waktu Malaysia)`,zh:`Open-Meteo 实时数据 · ${hm} 更新（马来西亚时间）`})}</span>`;
   }
-  return `<span class="status"><i></i>${t({en:'No internet: showing the saved run from 11 Nov 2026',ms:'Tiada internet: data simpanan 11 Nov 2026',zh:'无网络：显示 2026 年 11 月 11 日保存的数据'})}</span>`;
+  return `<span class="status"><i></i>${t({en:'No internet: showing the forecast saved on 28 Nov 2026',ms:'Tiada internet: ramalan disimpan pada 28 Nov 2026',zh:'无网络：显示 2026 年 11 月 28 日保存的预报'})}</span>`;
 }
 
 /* ---------- building blocks ---------- */
@@ -704,7 +704,7 @@ const SLIDES = [
     </div>
     <div style="display:flex;gap:18px;align-items:center;margin-top:-10px">${wxStatus()} <button type="button" class="btn" data-act="wx" style="font-size:20px">${t({en:'Refresh',ms:'Muat semula',zh:'刷新'})}</button>
       <span class="tiny muted">${t({en:'Daily rain, mm · Jerantut town 3.94°N 102.36°E · open-meteo.com',ms:'Hujan harian, mm · Bandar Jerantut 3.94°U 102.36°T · open-meteo.com',zh:'每日雨量（毫米）· 而连突市区 3.94°N 102.36°E · open-meteo.com'})}</span></div>${foot()}`; },
-  notes:`<b>1.5 min.</b> This chart pulls live data for Jerantut town when the phone or laptop is online; offline it shows the run saved on 11 Nov 2026 and the label says so. Point at the highlighted day: same town, same day, very different numbers. Ask: "Which one would you trust?" Answer: whichever has been right at <i>your</i> farm. CompareCast shows forecast against actual rain, a gust map, MetMalaysia radar and per-plot rain reminders. If the chart is slow, press Refresh or move on.` },
+  notes:`<b>1.5 min.</b> This chart pulls live data for Jerantut town when the phone or laptop is online; offline it shows the forecast saved on 28 Nov 2026 (29 Nov to 5 Dec) and the label says so. Point at the highlighted day: same town, same day, very different numbers. Ask: "Which one would you trust?" Answer: whichever has been right at <i>your</i> farm. CompareCast shows forecast against actual rain, a gust map, MetMalaysia radar and per-plot rain reminders. If the chart is slow, press Refresh or move on.` },
 
 /* 7 */ { min:0.75, name:'RainLog Lab',
   html: () => appSlide({id:'rainlog-lab', kick:K.weather,
