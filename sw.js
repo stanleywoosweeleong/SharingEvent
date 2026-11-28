@@ -1,5 +1,5 @@
 // Keeps the talk, its screenshots and icons available offline.
-const SHELL = 'woo-talk-shell-3148b46d5b';   // replaced on every new version
+const SHELL = 'woo-talk-shell-6e0f19e11c';   // replaced on every new version
 const SHOTS = 'woo-talk-shots';             // kept across versions, so "Save offline" survives updates
 const FILES = ["index.html","manifest.webmanifest","favicon.ico","icons/icon-192.png","icons/icon-512.png","icons/apple-touch-icon.png"];
 const SCOPE = new URL('./', self.registration.scope).pathname;
