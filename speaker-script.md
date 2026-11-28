@@ -79,7 +79,7 @@ Open (30 s). Selamat pagi / 大家好. I'm Stanley Woo. My friend Bryan Woo and 
 
 ## 8. CompareCast + live chart
 
-1.5 min. This chart pulls live data for Jerantut town when the phone or laptop is online; offline it shows the forecast saved on 28 Nov 2026 (29 Nov to 5 Dec) and the label says so. Point at the highlighted day: same town, same day, very different numbers. Ask: "Which one would you trust?" Answer: whichever has been right at your farm. CompareCast shows forecast against actual rain, a gust map, MetMalaysia radar and per-plot rain reminders. If the chart is slow, press Refresh or move on.
+1.5 min. This chart pulls live data for Jerantut town when the phone or laptop is online; offline it shows the forecast saved on 28 Nov 2026 (29 Nov to 5 Dec) and the label says so. The highlighted day is today (Sun 29/11): ask the room to compare it with the sky outside. The yellow box also names the biggest gap of the week (Mon 30/11 in the saved run: ICON 6.3 mm vs GFS 46.8 mm): same town, same day, very different numbers. Ask: "Which one would you trust?" Answer: whichever has been right at your farm. CompareCast shows forecast against actual rain, a gust map, MetMalaysia radar and per-plot rain reminders. If the chart is slow, press Refresh or move on.
 
 ## 9. Inside: CompareCast
 

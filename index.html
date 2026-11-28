@@ -481,6 +481,11 @@ function rainChart(){
   // day with the widest disagreement
   let best = 0, bestSpread = -1;
   for(let i=0;i<n;i++){ const vs = MODELS.map(m=>d[m.k][i]).filter(has); if(vs.length < 2) continue; const s = Math.max(...vs)-Math.min(...vs); if(s>bestSpread){bestSpread=s;best=i;} }
+  // Highlight today (Malaysia date) when it is in the chart, so the room can compare with the sky outside;
+  // the day with the widest disagreement is then mentioned in the callout as well.
+  const widest = best, today = new Date().toLocaleDateString('en-CA', {timeZone:'Asia/Kuala_Lumpur'});
+  const ti = d.time.indexOf(today), isToday = ti >= 0 && MODELS.filter(m => has(d[m.k][ti])).length >= 2;
+  if(bestSpread >= 0 && isToday) best = ti;
   let g = '';
   if(bestSpread >= 0) g += `<rect x="${padL+best*gw+4}" y="${padT-8}" width="${gw-8}" height="${H0-padT-padB+8}" rx="10" fill="var(--hi)"/>`;
   for(let v=0; v<=vmax; v+=step){ g += `<line class="gl" x1="${padL}" x2="${W0-padR}" y1="${y(v)}" y2="${y(v)}"/><text class="ax" x="${padL-12}" y="${y(v)+7}" text-anchor="end">${v}</text>`; }
@@ -505,10 +510,19 @@ function rainChart(){
   const lo = vs.reduce((a,b)=>b.v<a.v?b:a), hi = vs.reduce((a,b)=>b.v>a.v?b:a);
   const [dn, dd] = dayLabel(d.time[best]);
   const fmt = v => (Math.round(v*10)/10).toString();
+  const range = i => { const o = MODELS.map(m=>({m, v:d[m.k][i]})).filter(x => has(x.v)); return [o.reduce((a,b)=>b.v<a.v?b:a), o.reduce((a,b)=>b.v>a.v?b:a)]; };
+  if(isToday && widest !== best && S.k <= 1){   // the extra line only fits at the normal text size
+    const [wl, wh] = range(widest), [wn, wd] = dayLabel(d.time[widest]);
+    return {svg:`<svg class="chart" viewBox="0 0 ${W0} ${H0}" width="${W0}" height="${H0}" role="img" aria-label="Rain forecast by model">
+    <text class="ax" x="${padL-12}" y="${padT-20}" text-anchor="end" font-size="21">mm</text>${g}${gaps?`<text class="ax" x="${W0-padR}" y="${padT-11}" text-anchor="end" font-size="21">– = ${esc(t(NOFC))}</text>`:''}</svg>`, spread:{
+      en:`<b>Today</b>, ${dn} ${dd}: ${lo.m.name} says <b>${fmt(lo.v)} mm</b>, ${hi.m.name} says <b>${fmt(hi.v)} mm</b>.<br><span style="font-size:.85em">Biggest gap this week: ${wn} ${wd}, ${wl.m.name} ${fmt(wl.v)} mm vs ${wh.m.name} ${fmt(wh.v)} mm. Same town, same day.</span>`,
+      ms:`<b>Hari ini</b>, ${dn} ${dd}: ${lo.m.name} kata <b>${fmt(lo.v)} mm</b>, ${hi.m.name} kata <b>${fmt(hi.v)} mm</b>.<br><span style="font-size:.85em">Beza paling besar minggu ini: ${wn} ${wd}, ${wl.m.name} ${fmt(wl.v)} mm lawan ${wh.m.name} ${fmt(wh.v)} mm. Bandar sama, hari sama.</span>`,
+      zh:`<b>今天</b> ${dn} ${dd}：${lo.m.name} 说 <b>${fmt(lo.v)} 毫米</b>，${hi.m.name} 说 <b>${fmt(hi.v)} 毫米</b>。<br><span style="font-size:.85em">本周相差最大：${wn} ${wd}，${wl.m.name} ${fmt(wl.v)} 毫米对 ${wh.m.name} ${fmt(wh.v)} 毫米。同一个地方，同一天。</span>`}};
+  }
   const spread = {
-    en:`${dn} ${dd}: ${lo.m.name} says <b>${fmt(lo.v)} mm</b>, ${hi.m.name} says <b>${fmt(hi.v)} mm</b>. Same town, same day.`,
-    ms:`${dn} ${dd}: ${lo.m.name} kata <b>${fmt(lo.v)} mm</b>, ${hi.m.name} kata <b>${fmt(hi.v)} mm</b>. Bandar sama, hari sama.`,
-    zh:`${dn} ${dd}：${lo.m.name} 说 <b>${fmt(lo.v)} 毫米</b>，${hi.m.name} 说 <b>${fmt(hi.v)} 毫米</b>。同一个地方，同一天。`,
+    en:`${isToday ? '<b>Today</b>, ' : ''}${dn} ${dd}: ${lo.m.name} says <b>${fmt(lo.v)} mm</b>, ${hi.m.name} says <b>${fmt(hi.v)} mm</b>. Same town, same day.`,
+    ms:`${isToday ? '<b>Hari ini</b>, ' : ''}${dn} ${dd}: ${lo.m.name} kata <b>${fmt(lo.v)} mm</b>, ${hi.m.name} kata <b>${fmt(hi.v)} mm</b>. Bandar sama, hari sama.`,
+    zh:`${isToday ? '<b>今天</b> ' : ''}${dn} ${dd}：${lo.m.name} 说 <b>${fmt(lo.v)} 毫米</b>，${hi.m.name} 说 <b>${fmt(hi.v)} 毫米</b>。同一个地方，同一天。`,
   };
   const svg = `<svg class="chart" viewBox="0 0 ${W0} ${H0}" width="${W0}" height="${H0}" role="img" aria-label="Rain forecast by model">
     <text class="ax" x="${padL-12}" y="${padT-20}" text-anchor="end" font-size="21">mm</text>${g}${gaps?`<text class="ax" x="${W0-padR}" y="${padT-11}" text-anchor="end" font-size="21">– = ${esc(t(NOFC))}</text>`:''}</svg>`;
@@ -699,12 +713,12 @@ const SLIDES = [
       <div style="flex:none">${c.svg}</div>
       <div class="col grow" style="gap:16px">
         <div class="callout small">${t(c.spread)}</div>
-        <div class="small">${t({en:'CompareCast puts the models next to the rain that actually fell, so you can see which one to trust at your farm.',ms:'CompareCast letak model-model ini di sebelah hujan sebenar, supaya anda tahu mana yang boleh dipercayai di kebun anda.',zh:'CompareCast 把各模型和实际雨量放在一起，让你知道在你的园地该信哪一个。'})}</div>
+        ${S.k >= 1.4 ? '' : `<div class="small">${t({en:'CompareCast puts the models next to the rain that actually fell, so you can see which one to trust at your farm.',ms:'CompareCast letak model-model ini di sebelah hujan sebenar, supaya anda tahu mana yang boleh dipercayai di kebun anda.',zh:'CompareCast 把各模型和实际雨量放在一起，让你知道在你的园地该信哪一个。'})}</div>`}
       </div>
     </div>
     <div style="display:flex;gap:18px;align-items:center;margin-top:-10px">${wxStatus()} <button type="button" class="btn" data-act="wx" style="font-size:20px">${t({en:'Refresh',ms:'Muat semula',zh:'刷新'})}</button>
       <span class="tiny muted">${t({en:'Daily rain, mm · Jerantut town 3.94°N 102.36°E · open-meteo.com',ms:'Hujan harian, mm · Bandar Jerantut 3.94°U 102.36°T · open-meteo.com',zh:'每日雨量（毫米）· 而连突市区 3.94°N 102.36°E · open-meteo.com'})}</span></div>${foot()}`; },
-  notes:`<b>1.5 min.</b> This chart pulls live data for Jerantut town when the phone or laptop is online; offline it shows the forecast saved on 28 Nov 2026 (29 Nov to 5 Dec) and the label says so. Point at the highlighted day: same town, same day, very different numbers. Ask: "Which one would you trust?" Answer: whichever has been right at <i>your</i> farm. CompareCast shows forecast against actual rain, a gust map, MetMalaysia radar and per-plot rain reminders. If the chart is slow, press Refresh or move on.` },
+  notes:`<b>1.5 min.</b> This chart pulls live data for Jerantut town when the phone or laptop is online; offline it shows the forecast saved on 28 Nov 2026 (29 Nov to 5 Dec) and the label says so. The highlighted day is today (Sun 29/11): ask the room to compare it with the sky outside. The yellow box also names the biggest gap of the week (Mon 30/11 in the saved run: ICON 6.3 mm vs GFS 46.8 mm): same town, same day, very different numbers. Ask: "Which one would you trust?" Answer: whichever has been right at <i>your</i> farm. CompareCast shows forecast against actual rain, a gust map, MetMalaysia radar and per-plot rain reminders. If the chart is slow, press Refresh or move on.` },
 
 /* 7 */ { min:0.75, name:'RainLog Lab',
   html: () => appSlide({id:'rainlog-lab', kick:K.weather,
